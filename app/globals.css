@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #C8E63C;
+    color: #111111;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: var(--font-nunito), sans-serif;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.12) 1.5px, transparent 1.5px);
+    background-size: 14px 14px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-fredoka), cursive;
+    letter-spacing: 0.5px;
+  }
+}
+
+@layer utilities {
+  .neo-card {
+    @apply bg-white border-[3px] border-black rounded-[18px] p-[22px] mb-5;
+    box-shadow: 4px 4px 0 #111;
+  }
+  .neo-input {
+    font-family: var(--font-nunito), sans-serif;
+    @apply w-full py-[11px] px-[14px] border-[3px] border-black rounded-[10px] text-[14px] font-semibold bg-white outline-none transition-shadow duration-150 focus:shadow-[3px_3px_0_#111];
+  }
+  .neo-btn {
+    font-family: var(--font-fredoka), cursive;
+    @apply inline-flex items-center justify-center gap-[7px] py-[11px] px-[22px] border-[3px] border-black rounded-[11px] text-[16px] cursor-pointer transition-all duration-150 tracking-[0.3px] active:translate-x-[1px] active:translate-y-[1px];
+    box-shadow: 4px 4px 0 #111;
+  }
+  .neo-btn:active {
+    box-shadow: 2px 2px 0 #111;
+  }
+  .neo-btn:hover:not(:active) {
+    @apply -translate-x-[2px] -translate-y-[2px];
+    box-shadow: 6px 6px 0 #111;
+  }
+  
+  .metric-card {
+    @apply bg-white border-[3px] border-black rounded-[14px] py-[14px] px-[16px] relative overflow-hidden;
+    box-shadow: 4px 4px 0 #111;
+  }
+}

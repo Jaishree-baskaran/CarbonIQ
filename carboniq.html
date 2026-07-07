@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarbonIQ — AI Carbon Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --lime: #C8E63C;
+      --lime2: #b5d42a;
+      --lime3: #e8f87a;
+      --black: #111111;
+      --white: #FAFFF0;
+      --pink: #FF5FA0;
+      --blue: #4FC3F7;
+      --orange: #FF7A2F;
+      --teal: #26C6DA;
+      --green: #2ECC71;
+      --red: #FF4757;
+      --yellow: #FFD32A;
+      --outline: 3px solid #111;
+      --shadow: 4px 4px 0 #111;
+      --shadow-lg: 6px 6px 0 #111;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--lime);
+      font-family: 'Nunito', sans-serif;
+      color: var(--black);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HALFTONE BG ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(0, 0, 0, 0.12) 1.5px, transparent 1.5px);
+      background-size: 14px 14px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── PANELS ── */
+    .shell {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--black);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .logo-area {
+      padding: 20px 16px 16px;
+      border-bottom: 3px solid var(--lime);
+    }
+
+    .logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 26px;
+      color: var(--lime);
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+
+    .logo span {
+      color: var(--pink);
+    }
+
+    .logo-sub {
+      font-size: 9px;
+      color: rgba(200, 230, 60, 0.6);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    /* vayundhra in sidebar */
+    .vayundhra-sidebar {
+      padding: 14px 16px;
+      border-bottom: 2px solid rgba(200, 230, 60, 0.15);
+    }
+
+    .vayundhra-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vayundhra-ball {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #a8f0c6, #26C6DA 50%, #0e8fa0);
+      border: 2.5px solid var(--lime);
+      flex-shrink: 0;
+      position: relative;
+      animation: bobb 3s ease-in-out infinite;
+    }
+
+    .vayundhra-ball::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      width: 9px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.55);
+      border-radius: 50%;
+      transform: rotate(-25deg);
+    }
+
+    @keyframes bobb {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-5px)
+      }
+    }
+
+    .vayundhra-txt {
+      flex: 1;
+    }
+
+    .vayundhra-nm {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--lime);
+    }
+
+    .vayundhra-mood {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 1px;
+    }
+
+    /* User pill in sidebar */
+    .user-pill {
+      margin: 10px 16px;
+      background: rgba(200, 230, 60, 0.12);
+      border: 1.5px solid rgba(200, 230, 60, 0.3);
+      border-radius: 20px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--lime);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--black);
+      flex-shrink: 0;
+      border: 2px solid var(--black);
+    }
+
+    .user-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--white);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .logout-btn {
+      font-size: 10px;
+      color: var(--pink);
+      cursor: pointer;
+      font-weight: 700;
+      background: none;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .nav {
+      padding: 8px 0;
+      flex: 1;
+    }
+
+    .nav-section {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(200, 230, 60, 0.4);
+      padding: 10px 16px 4px;
+      font-weight: 700;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 16px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.55);
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      color: #fff;
+      background: rgba(200, 230, 60, 0.08);
+    }
+
+    .nav-item.active {
+      color: var(--lime);
+      background: rgba(200, 230, 60, 0.1);
+      border-left-color: var(--lime);
+    }
+
+    .nav-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .nav-item.org-mode {
+      color: rgba(255, 90, 160, 0.7);
+    }
+
+    .nav-item.org-mode.active {
+      color: var(--pink);
+      border-left-color: var(--pink);
+      background: rgba(255, 90, 160, 0.1);
+    }
+
+    .sidebar-foot {
+      padding: 12px 16px;
+      border-top: 2px solid rgba(200, 230, 60, 0.15);
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.25);
+      line-height: 1.7;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 100vh;
+    }
+
+    .page {
+      display: none;
+      padding: 28px 32px 60px;
+      max-width: 1100px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* ── LOGIN SCREEN ── */
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: var(--lime);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-screen::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(0, 0, 0, 0.1) 1.5px, transparent 1.5px);
+      background-size: 14px 14px;
+    }
+
+    .login-box {
+      position: relative;
+      z-index: 1;
+      background: var(--white);
+      border: var(--outline);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      padding: 40px;
+      width: 460px;
+      max-width: 95vw;
+    }
+
+    .login-mascot {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .login-orb {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #a8f0c6, #26C6DA 55%, #0e7a8c);
+      border: 4px solid var(--black);
+      margin: 0 auto 12px;
+      position: relative;
+      animation: bobb 3s ease-in-out infinite;
+    }
+
+    .login-orb::after {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 18px;
+      width: 18px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.55);
+      border-radius: 50%;
+      transform: rotate(-25deg);
+    }
+
+    .login-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 38px;
+      color: var(--black);
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .login-title span {
+      color: var(--pink);
+    }
+
+    .login-sub {
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 28px;
+      font-weight: 600;
+    }
+
+    .login-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      border: var(--outline);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .login-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--white);
+      transition: all 0.15s;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .login-tab.active {
+      background: var(--lime);
+      color: var(--black);
+    }
+
+    .login-tab:first-child {
+      border-right: var(--outline);
+    }
+
+    .field-group {
+      margin-bottom: 16px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      color: var(--black);
+    }
+
+    .field-group input {
+      width: 100%;
+      padding: 11px 14px;
+      border: var(--outline);
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      background: var(--white);
+      outline: none;
+      transition: box-shadow 0.15s;
+    }
+
+    .field-group input:focus {
+      box-shadow: 4px 4px 0 var(--black);
+    }
+
+    .big-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--lime);
+      border: var(--outline);
+      border-radius: 12px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: all 0.12s;
+      letter-spacing: 0.5px;
+    }
+
+    .big-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 #111;
+    }
+
+    .big-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #111;
+    }
+
+    .big-btn.org {
+      background: var(--pink);
+      color: var(--white);
+    }
+
+    .login-deco {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+      font-size: 28px;
+    }
+
+    /* ── PAGE HEADERS ── */
+    .pg-head {
+      margin-bottom: 24px;
+    }
+
+    .pg-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--black);
+      color: var(--lime);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .pg-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--lime);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.3
+      }
+    }
+
+    .pg-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 40px;
+      color: var(--black);
+      line-height: 1.05;
+      letter-spacing: 0.5px;
+    }
+
+    .pg-title em {
+      color: var(--pink);
+      font-style: normal;
+    }
+
+    .pg-sub {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.55);
+      margin-top: 4px;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--white);
+      border: var(--outline);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .card.lime {
+      background: var(--lime);
+    }
+
+    .card.black {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .card.pink {
+      background: #FFE8F3;
+      border-color: #111;
+    }
+
+    .card-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 16px;
+      letter-spacing: 0.3px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title .ct-icon {
+      font-size: 18px;
+    }
+
+    /* ── METRIC GRID ── */
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .mcard {
+      background: var(--white);
+      border: var(--outline);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mcard::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      opacity: 0.12;
+    }
+
+    .mcard.m-lime::after {
+      background: var(--lime);
+    }
+
+    .mcard.m-pink::after {
+      background: var(--pink);
+    }
+
+    .mcard.m-blue::after {
+      background: var(--blue);
+    }
+
+    .mcard.m-orange::after {
+      background: var(--orange);
+    }
+
+    .mcard.m-teal::after {
+      background: var(--teal);
+    }
+
+    .mc-label {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(0, 0, 0, 0.45);
+      margin-bottom: 5px;
+    }
+
+    .mc-value {
+      font-family: 'Fredoka One', cursive;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--black);
+    }
+
+    .mc-value.lime {
+      color: #5a8a00;
+    }
+
+    .mc-value.pink {
+      color: var(--pink);
+    }
+
+    .mc-value.blue {
+      color: #0077aa;
+    }
+
+    .mc-value.orange {
+      color: var(--orange);
+    }
+
+    .mc-value.red {
+      color: var(--red);
+    }
+
+    .mc-unit {
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(0, 0, 0, 0.4);
+      margin-top: 3px;
+    }
+
+    /* ── FORM ELEMENTS ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .ff {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .ff label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .ff input,
+    .ff select {
+      padding: 10px 13px;
+      border: 2.5px solid #111;
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      background: #fff;
+      outline: none;
+      transition: box-shadow 0.12s;
+    }
+
+    .ff input:focus,
+    .ff select:focus {
+      box-shadow: 3px 3px 0 #111;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      padding-right: 42px;
+    }
+
+    .input-suf {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      font-weight: 800;
+      color: rgba(0, 0, 0, 0.35);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 22px;
+      border: var(--outline);
+      border-radius: 11px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: all 0.12s;
+      letter-spacing: 0.3px;
+    }
+
+    .btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 #111;
+    }
+
+    .btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0 #111;
+    }
+
+    .btn-lime {
+      background: var(--lime);
+    }
+
+    .btn-pink {
+      background: var(--pink);
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: #fff;
+      color: #111;
+    }
+
+    .btn-sm {
+      font-size: 12px;
+      padding: 7px 14px;
+      border-width: 2px;
+      box-shadow: 3px 3px 0 #111;
+    }
+
+    /* ── RESULT PANEL ── */
+    .result-panel {
+      display: none;
+      animation: slideUp 0.3s ease;
+    }
+
+    .result-panel.show {
+      display: block;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* Gauge */
+    .risk-gauge {
+      background: #f0f0f0;
+      border: 2.5px solid #111;
+      border-radius: 30px;
+      height: 22px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .risk-fill {
+      height: 100%;
+      border-radius: 30px;
+      transition: width 0.9s cubic-bezier(.4, 0, .2, 1);
+      position: relative;
+    }
+
+    .risk-fill::after {
+      content: attr(data-pct);
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    /* Breakdown bars */
+    .bk-item {
+      margin-bottom: 10px;
+    }
+
+    .bk-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+
+    .bk-name {
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .bk-val {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--black);
+    }
+
+    .bk-track {
+      background: #eee;
+      border: 2px solid #111;
+      border-radius: 6px;
+      height: 14px;
+      overflow: hidden;
+    }
+
+    .bk-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+
+    /* AI advice box */
+    .ai-advice {
+      background: var(--black);
+      border: 3px solid var(--lime);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .ai-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .ai-badge {
+      background: var(--lime);
+      color: #111;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 3px 8px;
+    }
+
+    .ai-text {
+      font-size: 12px;
+      color: rgba(200, 230, 60, 0.85);
+      line-height: 1.65;
+      font-weight: 600;
+    }
+
+    /* ── BAR CHART ── */
+    .bchart {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .bc-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bc-name {
+      font-size: 10px;
+      font-weight: 800;
+      width: 130px;
+      flex-shrink: 0;
+      text-align: right;
+      color: rgba(0, 0, 0, 0.65);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bc-track {
+      flex: 1;
+      background: #eee;
+      border: 2px solid #111;
+      border-radius: 6px;
+      height: 20px;
+      overflow: hidden;
+    }
+
+    .bc-fill {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      transition: width 0.7s ease;
+    }
+
+    .bc-fillval {
+      font-size: 9px;
+      font-weight: 900;
+      color: #111;
+      white-space: nowrap;
+    }
+
+    /* ── AQI BADGE ── */
+    .aqi-cat {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 900;
+      border: 2.5px solid #111;
+    }
+
+    /* ── STATE RATING ── */
+    .rating-ring {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 4px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    /* ── ORG TABLE ── */
+    .org-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .org-table th {
+      padding: 9px 12px;
+      text-align: left;
+      background: var(--black);
+      color: var(--lime);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .org-table th:first-child {
+      border-radius: 8px 0 0 0;
+    }
+
+    .org-table th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    .org-table td {
+      padding: 10px 12px;
+      border-bottom: 2px solid #eee;
+      font-weight: 700;
+    }
+
+    .org-table tr:hover td {
+      background: rgba(200, 230, 60, 0.1);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 900;
+      border: 2px solid #111;
+    }
+
+    .tag-green {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .tag-amber {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .tag-red {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    /* ── SPINNER ── */
+    .spin {
+      width: 16px;
+      height: 16px;
+      border: 2.5px solid rgba(0, 0, 0, 0.2);
+      border-top-color: var(--black);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* ── STICKER DECO ── */
+    .sticker {
+      display: inline-block;
+      font-size: 28px;
+      filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.2));
+    }
+
+    .deco-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* ── NOTIFICATION / TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      background: var(--black);
+      color: var(--lime);
+      border: 3px solid var(--lime);
+      border-radius: 14px;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: var(--shadow-lg);
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 20px;
+      border: var(--outline);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--white);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 14px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 14px;
+      cursor: pointer;
+      background: var(--white);
+      border: none;
+      border-right: 2.5px solid #111;
+      font-weight: 400;
+      transition: all 0.12s;
+      letter-spacing: 0.3px;
+    }
+
+    .tab-btn:last-child {
+      border-right: none;
+    }
+
+    .tab-btn.active {
+      background: var(--lime);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Two col */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media(max-width:768px) {
+
+      .two-col,
+      .three-col {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none
+      }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+
+    /* Top bar for user session info */
+    .topbar-session {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--black);
+      color: var(--white);
+      padding: 8px 32px;
+      font-size: 11px;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .session-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .session-logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 14px;
+      color: var(--lime);
+    }
+
+    .session-logo span {
+      color: var(--pink);
+    }
+
+    .session-user {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .session-time {
+      color: rgba(200, 230, 60, 0.6);
+      font-size: 10px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <div class="login-mascot">
+        <div class="login-orb"></div>
+      </div>
+      <div class="login-title">Carbon<span>IQ</span></div>
+      <div class="login-sub">India's AI-powered carbon intelligence platform 🌍</div>
+
+      <div class="login-tabs">
+        <button class="login-tab active" onclick="switchLoginTab('user',this)">👤 Individual Login</button>
+        <button class="login-tab" onclick="switchLoginTab('org',this)">🏢 Organization Login</button>
+      </div>
+
+      <div id="userLoginForm">
+        <div class="field-group"><label>Your Full Name</label><input type="text" id="loginName"
+            placeholder="e.g. Jaishree B" autocomplete="name"></div>
+        <div class="field-group"><label>Email Address</label><input type="email" id="loginEmail"
+            placeholder="you@email.com"></div>
+        <div class="field-group"><label>State / City</label>
+          <select id="loginState"
+            style="width:100%;padding:11px 14px;border:3px solid #111;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;background:#fff;outline:none;">
+            <option value="">Select your state...</option>
+            <option>Tamil Nadu</option>
+            <option>Maharashtra</option>
+            <option>Delhi</option>
+            <option>Karnataka</option>
+            <option>Gujarat</option>
+            <option>Rajasthan</option>
+            <option>Kerala</option>
+            <option>West Bengal</option>
+            <option>Uttar Pradesh</option>
+            <option>Andhra Pradesh</option>
+            <option>Telangana</option>
+            <option>Bihar</option>
+            <option>Himachal Pradesh</option>
+            <option>Uttarakhand</option>
+            <option>Sikkim</option>
+            <option>Punjab</option>
+            <option>Haryana</option>
+            <option>Odisha</option>
+            <option>Madhya Pradesh</option>
+            <option>Jharkhand</option>
+            <option>Assam</option>
+            <option>Goa</option>
+          </select>
+        </div>
+        <button class="big-btn" onclick="doUserLogin()">🚀 Get Started!</button>
+      </div>
+
+      <div id="orgLoginForm" style="display:none">
+        <div class="field-group"><label>Organization Name</label><input type="text" id="orgName"
+            placeholder="e.g. Deccan AI Experts"></div>
+        <div class="field-group"><label>Admin Email</label><input type="email" id="orgEmail"
+            placeholder="admin@org.com"></div>
+        <div class="field-group"><label>Admin Password</label><input type="password" id="orgPass"
+            placeholder="••••••••"></div>
+        <button class="big-btn org" onclick="doOrgLogin()">🏢 Access Dashboard</button>
+        <p style="font-size:10px;color:#888;text-align:center;margin-top:10px;">Demo: any org name + password "admin123"
+        </p>
+      </div>
+
+      <div class="login-deco">🌱 ⚡ 🌍 💨 ♻️</div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div class="shell" id="appShell" style="display:none">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo-area">
+        <div class="logo">Carbon<span>IQ</span></div>
+        <div class="logo-sub">AI Emission Intelligence</div>
+      </div>
+
+      <div class="vayundhra-sidebar">
+        <div class="vayundhra-mini">
+          <div class="vayundhra-ball"></div>
+          <div class="vayundhra-txt">
+            <div class="vayundhra-nm">vayundhra</div>
+            <div class="vayundhra-mood" id="vayundhra-mood">Ready to track! 🌍</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="user-pill" id="user-pill">
+        <div class="user-avatar" id="user-avatar">?</div>
+        <div class="user-name" id="sidebar-username">Loading...</div>
+        <button class="logout-btn" onclick="doLogout()">Out</button>
+      </div>
+
+      <nav class="nav">
+        <div class="nav-section">Modes</div>
+        <div class="nav-item active" id="nav-individual" onclick="setPage('individual',this)">
+          <span class="nav-icon">👤</span> Individual Mode
+        </div>
+        <div class="nav-item" id="nav-methane" onclick="setPage('methane',this)">
+          <span class="nav-icon">💨</span> Methane Tracker
+        </div>
+        <div class="nav-item" id="nav-aqi" onclick="setPage('aqi',this)">
+          <span class="nav-icon">🌫️</span> City Air Quality
+        </div>
+        <div class="nav-item" id="nav-policy" onclick="setPage('policy',this)">
+          <span class="nav-icon">📋</span> State Policy Hub
+        </div>
+        <div class="nav-section" id="org-nav-section" style="display:none">Org Admin</div>
+        <div class="nav-item org-mode" id="nav-org" onclick="setPage('org',this)" style="display:none">
+          <span class="nav-icon">🏢</span> Org Dashboard
+        </div>
+      </nav>
+
+      <div class="sidebar-foot">Data: CPCB · CEA · MoEFCC<br>GHGSat · Carbon Mapper<br>NITI Aayog 2024–25</div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <div class="topbar-session">
+        <div class="session-left">
+          <span class="session-logo">Carbon<span>IQ</span></span>
+          <span class="session-user" id="top-user-label">—</span>
+        </div>
+        <span class="session-time" id="session-clock">—</span>
+      </div>
+
+      <!-- ══ INDIVIDUAL MODE ══ -->
+      <div class="page active" id="page-individual">
+        <div style="padding:28px 32px 0">
+          <div class="deco-row">
+            <span class="sticker">⚡</span><span class="sticker">🌱</span><span class="sticker">🌍</span>
+            <div class="pg-badge">
+              <div class="dot"></div>Individual Mode
+            </div>
+          </div>
+          <div class="pg-title">Your Carbon <em>Footprint</em></div>
+          <div class="pg-sub">Track, predict & reduce your household emissions with AI</div>
+        </div>
+
+        <div style="padding:20px 32px 0">
+          <div class="card">
+            <div class="card-title"><span class="ct-icon">📊</span> Enter Your Usage Data</div>
+            <div class="form-grid">
+              <div class="ff">
+                <label>Electricity Usage</label>
+                <div class="input-wrap"><input type="number" id="units" placeholder="200" min="0"><span
+                    class="input-suf">kWh/mo</span></div>
+              </div>
+              <div class="ff">
+                <label>Travel Distance</label>
+                <div class="input-wrap"><input type="number" id="distance" placeholder="50" min="0"><span
+                    class="input-suf">km/wk</span></div>
+              </div>
+              <div class="ff">
+                <label>LPG Cylinders</label>
+                <div class="input-wrap"><input type="number" id="cylinders" placeholder="1" min="0"><span
+                    class="input-suf">/ mo</span></div>
+              </div>
+              <div class="ff">
+                <label>Transport Mode</label>
+                <select id="transport">
+                  <option value="Car">Car</option>
+                  <option value="Bike">Bike / Two-wheeler</option>
+                  <option value="Bus">Bus / Public Transit</option>
+                  <option value="Metro">Metro / Train</option>
+                  <option value="Walk/Cycle">Walk / Cycle</option>
+                </select>
+              </div>
+              <div class="ff">
+                <label>Vehicle Type</label>
+                <select id="vehicle">
+                  <option value="Petrol">Petrol</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="CNG">CNG</option>
+                  <option value="Electric">Electric</option>
+                  <option value="N/A">N/A</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+              <button class="btn btn-lime" onclick="runAnalysis()">
+                <div class="spin" id="btn-spin"></div>
+                <span id="btn-label">🔍 Analyse Footprint</span>
+              </button>
+              <button class="btn btn-ghost btn-sm" onclick="clearCalc()">✕ Clear</button>
+            </div>
+          </div>
+
+          <div class="result-panel" id="result-panel">
+            <div class="metric-row">
+              <div class="mcard m-lime">
+                <div class="mc-label">Total CO₂</div>
+                <div class="mc-value lime" id="r-total">—</div>
+                <div class="mc-unit">kg / month</div>
+              </div>
+              <div class="mcard m-blue">
+                <div class="mc-label">ML Predicted</div>
+                <div class="mc-value blue" id="r-predicted">—</div>
+                <div class="mc-unit">kg / month</div>
+              </div>
+              <div class="mcard m-pink">
+                <div class="mc-label">Risk Score</div>
+                <div class="mc-value" id="r-risk">—</div>
+                <div class="mc-unit">out of 100</div>
+              </div>
+              <div class="mcard m-teal">
+                <div class="mc-label">User Profile</div>
+                <div class="mc-value" id="r-cluster"
+                  style="font-size:13px;font-family:'Nunito',sans-serif;margin-top:4px;font-weight:900">—</div>
+                <div class="mc-unit" id="r-cluster-id"></div>
+              </div>
+              <div class="mcard m-orange">
+                <div class="mc-label">vs National Avg</div>
+                <div class="mc-value orange" id="r-vs-nat" style="font-size:22px">—</div>
+                <div class="mc-unit">Avg: 158 kg/mo</div>
+              </div>
+              <div class="mcard m-pink">
+                <div class="mc-label">Compound Risk</div>
+                <div class="mc-value" id="r-compound" style="font-size:22px">—</div>
+                <div class="mc-unit">CO2 + local AQI</div>
+              </div>
+            </div>
+
+            <div class="two-col">
+              <div class="card">
+                <div class="card-title"><span class="ct-icon">📈</span> Emission Sources</div>
+                <div id="bk-bars"></div>
+              </div>
+              <div class="card">
+                <div class="card-title"><span class="ct-icon">⚠️</span> Risk Level</div>
+                <div style="margin-bottom:8px">
+                  <div class="risk-gauge">
+                    <div class="risk-fill" id="risk-fill" style="width:0%"></div>
+                  </div>
+                  <div
+                    style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:rgba(0,0,0,0.4)">
+                    <span>Low</span><span>Moderate</span><span>High</span></div>
+                </div>
+                <div id="risk-text" style="font-size:12px;font-weight:700;margin-top:8px"></div>
+              </div>
+            </div>
+
+            <!-- Local AQI context -->
+            <div id="local-aqi-box"
+              style="display:none;background:#e8f4ff;border:2.5px solid #111;border-radius:12px;padding:12px 16px;margin-bottom:12px;font-size:12px;font-weight:700">
+              <div
+                style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:4px">
+                Your City Air Quality (CPCB 2024-25)</div>
+              <div id="local-aqi-text"></div>
+            </div>
+
+            <!-- Nearby methane site -->
+            <div id="local-context-box"
+              style="display:none;background:#fff8e1;border:2.5px solid #111;border-radius:12px;padding:12px 16px;margin-bottom:12px;font-size:12px;font-weight:700;line-height:1.6">
+              <div
+                style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:4px">
+                Nearby Methane Site in Your State</div>
+              <div id="local-site-text"></div>
+            </div>
+
+            <!-- Backend optimization tips -->
+            <div style="margin-bottom:12px">
+              <div
+                style="font-size:10px;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;color:rgba(0,0,0,0.45);margin-bottom:8px">
+                Smart Recommendations</div>
+              <div id="backend-tips"></div>
+            </div>
+
+            <div class="ai-advice" id="ai-advice-box" style="display:none">
+              <div class="ai-tag">
+                <div class="vayundhra-ball" style="width:24px;height:24px;border-width:2px"></div>
+                <span class="ai-badge">vayundhra AI Advice</span>
+                <div class="spin" id="ai-spin"></div>
+              </div>
+              <div class="ai-text" id="ai-text">Thinking...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ METHANE PAGE ══ -->
+      <div class="page" id="page-methane">
+        <div style="padding:28px 32px 0">
+          <div class="deco-row"><span class="sticker">💨</span><span class="sticker">🗑️</span>
+            <div class="pg-badge">
+              <div class="dot"></div>Methane Tracker
+            </div>
+          </div>
+          <div class="pg-title">India <em>Methane</em> Hotspots</div>
+          <div class="pg-sub">Top landfill CH₄ emitters · GHGSat / Carbon Mapper 2024</div>
+        </div>
+        <div style="padding:20px 32px 0">
+          <div class="metric-row">
+            <div class="mcard m-orange">
+              <div class="mc-label">Sites Tracked</div>
+              <div class="mc-value orange">6</div>
+            </div>
+            <div class="mcard m-pink">
+              <div class="mc-label">Highest CH₄</div>
+              <div class="mc-value pink">48.2</div>
+              <div class="mc-unit">kt/yr · Hyderabad</div>
+            </div>
+            <div class="mcard m-lime">
+              <div class="mc-label">India Global Rank</div>
+              <div class="mc-value lime">#3</div>
+              <div class="mc-unit">CH₄ emitter</div>
+            </div>
+            <div class="mcard m-blue">
+              <div class="mc-label">Total Est.</div>
+              <div class="mc-value blue">190</div>
+              <div class="mc-unit">kt CH₄/yr tracked</div>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div class="card">
+              <div class="card-title"><span class="ct-icon">📊</span> CH₄ by Site</div>
+              <div class="bchart" id="methane-chart"></div>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="ct-icon">📍</span> Site Details</div>
+              <select onchange="showMethaneDetail(this.value)"
+                style="width:100%;padding:10px 13px;border:2.5px solid #111;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;margin-bottom:14px;outline:none;">
+                <option value="">Select a site...</option>
+                <option value="Secunderabad – Jawaharnagar">Jawaharnagar, Hyderabad</option>
+                <option value="Deonar – Mumbai">Deonar, Mumbai</option>
+                <option value="Bhalswa – Delhi">Bhalswa, Delhi</option>
+                <option value="Ghazipur – Delhi">Ghazipur, Delhi</option>
+                <option value="Perungudi – Chennai">Perungudi, Chennai</option>
+                <option value="Brahmapuram – Kochi">Brahmapuram, Kochi</option>
+              </select>
+              <div id="methane-detail" style="font-size:12px;font-weight:600;color:rgba(0,0,0,0.55)">Select a site to
+                see satellite data.</div>
+            </div>
+          </div>
+
+          <div class="three-col">
+            <div class="card lime">
+              <div class="card-title"><span class="ct-icon">♻️</span> Gas Capture</div>
+              <p style="font-size:12px;font-weight:700;line-height:1.6">Landfill gas capture can convert CH₄ to
+                electricity. Jawaharnagar alone could power ~30,000 homes.</p>
+            </div>
+            <div class="card pink">
+              <div class="card-title"><span class="ct-icon">🗂️</span> Waste Segregation</div>
+              <p style="font-size:12px;font-weight:700;line-height:1.6">Wet waste composting reduces methane by up to
+                70%. Swachh Bharat Phase 2 mandates 100% source segregation.</p>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="ct-icon">⛏️</span> Bio-mining</div>
+              <p style="font-size:12px;font-weight:700;line-height:1.6">Legacy waste bio-mining recovers land + cuts
+                methane. Ongoing at Ghazipur. Cost: ₹400–600/tonne.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ AQI PAGE ══ -->
+      <div class="page" id="page-aqi">
+        <div style="padding:28px 32px 0">
+          <div class="deco-row"><span class="sticker">🌫️</span><span class="sticker">🏙️</span>
+            <div class="pg-badge">
+              <div class="dot"></div>Air Quality Index
+            </div>
+          </div>
+          <div class="pg-title">City <em>Air Quality</em></div>
+          <div class="pg-sub">CPCB average AQI — 20 major cities · 2024–25</div>
+        </div>
+        <div style="padding:20px 32px 0">
+          <div class="metric-row">
+            <div class="mcard m-blue">
+              <div class="mc-label">Cities Tracked</div>
+              <div class="mc-value blue">20</div>
+            </div>
+            <div class="mcard m-pink">
+              <div class="mc-label">Worst AQI</div>
+              <div class="mc-value pink">312</div>
+              <div class="mc-unit">Delhi · Very Poor</div>
+            </div>
+            <div class="mcard m-lime">
+              <div class="mc-label">Best AQI</div>
+              <div class="mc-value lime">72</div>
+              <div class="mc-unit">Kochi · Good</div>
+            </div>
+            <div class="mcard m-orange">
+              <div class="mc-label">National Avg</div>
+              <div class="mc-value orange">163</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="ct-icon">🔍</span> City AQI Explorer</div>
+            <select onchange="showAQICity(this.value)"
+              style="width:100%;padding:10px 13px;border:2.5px solid #111;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;margin-bottom:16px;outline:none;">
+              <option value="">Choose a city...</option>
+              <option>Delhi</option>
+              <option>Mumbai</option>
+              <option>Kolkata</option>
+              <option>Chennai</option>
+              <option>Hyderabad</option>
+              <option>Bengaluru</option>
+              <option>Ahmedabad</option>
+              <option>Pune</option>
+              <option>Jaipur</option>
+              <option>Lucknow</option>
+              <option>Patna</option>
+              <option>Kanpur</option>
+              <option>Varanasi</option>
+              <option>Nagpur</option>
+              <option>Surat</option>
+              <option>Visakhapatnam</option>
+              <option>Kochi</option>
+              <option>Coimbatore</option>
+              <option>Chandigarh</option>
+              <option>Bhopal</option>
+            </select>
+            <div id="aqi-city-result" style="display:none">
+              <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+                <div id="aqi-big-num" style="font-family:'Fredoka One',cursive;font-size:56px;line-height:1"></div>
+                <div>
+                  <div id="aqi-cat-badge" class="aqi-cat"></div>
+                  <div style="font-size:11px;font-weight:700;color:rgba(0,0,0,0.4);margin-top:4px">Air Quality Index
+                  </div>
+                </div>
+              </div>
+              <div class="metric-row" id="aqi-poll-grid"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="ct-icon">🎨</span> AQI Scale</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px">
+              <div style="border:2.5px solid #111;border-radius:10px;padding:10px;border-left:5px solid #4ade80">
+                <div style="font-size:11px;font-weight:900;color:#155724">Good · 0–50</div>
+                <div style="font-size:10px;font-weight:600;color:#555;margin-top:2px">Minimal health impact</div>
+              </div>
+              <div style="border:2.5px solid #111;border-radius:10px;padding:10px;border-left:5px solid #86efac">
+                <div style="font-size:11px;font-weight:900;color:#1a6830">Satisfactory · 51–100</div>
+                <div style="font-size:10px;font-weight:600;color:#555;margin-top:2px">Minor issues for sensitive</div>
+              </div>
+              <div style="border:2.5px solid #111;border-radius:10px;padding:10px;border-left:5px solid #fbbf24">
+                <div style="font-size:11px;font-weight:900;color:#856404">Moderate · 101–200</div>
+                <div style="font-size:10px;font-weight:600;color:#555;margin-top:2px">Asthma patients affected</div>
+              </div>
+              <div style="border:2.5px solid #111;border-radius:10px;padding:10px;border-left:5px solid #f97316">
+                <div style="font-size:11px;font-weight:900;color:#7c3a00">Poor · 201–300</div>
+                <div style="font-size:10px;font-weight:600;color:#555;margin-top:2px">Breathing discomfort</div>
+              </div>
+              <div style="border:2.5px solid #111;border-radius:10px;padding:10px;border-left:5px solid #f87171">
+                <div style="font-size:11px;font-weight:900;color:#721c24">Very Poor · 301–400</div>
+                <div style="font-size:10px;font-weight:600;color:#555;margin-top:2px">Respiratory illness risk</div>
+              </div>
+              <div style="border:2.5px solid #111;border-radius:10px;padding:10px;border-left:5px solid #dc2626">
+                <div style="font-size:11px;font-weight:900;color:#450a0a">Severe · 401+</div>
+                <div style="font-size:10px;font-weight:600;color:#555;margin-top:2px">Hazardous for all</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STATE POLICY ══ -->
+      <div class="page" id="page-policy">
+        <div style="padding:28px 32px 0">
+          <div class="deco-row"><span class="sticker">📋</span><span class="sticker">🏛️</span>
+            <div class="pg-badge">
+              <div class="dot"></div>State Policy Hub
+            </div>
+          </div>
+          <div class="pg-title">Green <em>State Policies</em></div>
+          <div class="pg-sub">Renewable energy, EV policy & climate targets · MoEFCC / NITI Aayog 2024</div>
+        </div>
+        <div style="padding:20px 32px 0">
+          <div class="metric-row">
+            <div class="mcard m-lime">
+              <div class="mc-label">States Tracked</div>
+              <div class="mc-value lime">23</div>
+            </div>
+            <div class="mcard m-blue">
+              <div class="mc-label">Avg Renewable</div>
+              <div class="mc-value blue">34%</div>
+            </div>
+            <div class="mcard m-teal">
+              <div class="mc-label">EV Policy States</div>
+              <div class="mc-value" style="color:#005f6b">18/23</div>
+            </div>
+            <div class="mcard m-orange">
+              <div class="mc-label">India NDC</div>
+              <div class="mc-value"
+                style="font-size:13px;font-family:'Nunito',sans-serif;font-weight:900;margin-top:4px">45% cut by 2030
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="ct-icon">🔍</span> Explore a State</div>
+            <select onchange="showStatePolicy(this.value)"
+              style="width:100%;padding:10px 13px;border:2.5px solid #111;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;margin-bottom:16px;outline:none;">
+              <option value="">Choose a state...</option>
+              <option>Kerala</option>
+              <option>Karnataka</option>
+              <option>Tamil Nadu</option>
+              <option>Gujarat</option>
+              <option>Rajasthan</option>
+              <option>Maharashtra</option>
+              <option>Telangana</option>
+              <option>Andhra Pradesh</option>
+              <option>Delhi</option>
+              <option>Uttar Pradesh</option>
+              <option>Bihar</option>
+              <option>Jharkhand</option>
+              <option>Chhattisgarh</option>
+              <option>West Bengal</option>
+              <option>Punjab</option>
+              <option>Himachal Pradesh</option>
+              <option>Uttarakhand</option>
+              <option>Sikkim</option>
+              <option>Goa</option>
+              <option>Odisha</option>
+              <option>Madhya Pradesh</option>
+              <option>Haryana</option>
+              <option>Assam</option>
+            </select>
+            <div id="state-detail" style="display:none">
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+                <div class="rating-ring" id="rating-ring"></div>
+                <div>
+                  <div id="state-name-h" style="font-family:'Fredoka One',cursive;font-size:20px"></div>
+                  <div id="state-tag" style="font-size:11px;font-weight:700;color:rgba(0,0,0,0.45);margin-top:2px">
+                  </div>
+                </div>
+              </div>
+              <div class="metric-row" id="state-metrics"></div>
+              <div id="state-policy-box"
+                style="background:#f8f8f2;border:2.5px solid #111;border-radius:10px;padding:12px;font-size:12px;font-weight:700;line-height:1.65;color:#333;margin-top:4px">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ORG DASHBOARD ══ -->
+      <div class="page" id="page-org">
+        <div style="padding:28px 32px 0">
+          <div class="deco-row"><span class="sticker">🏢</span><span class="sticker">📊</span>
+            <div class="pg-badge" style="background:var(--pink);color:white;border:2px solid #111">
+              <div class="dot" style="background:white"></div>Org Admin
+            </div>
+          </div>
+          <div class="pg-title" id="org-pg-title">Organization <em>Dashboard</em></div>
+          <div class="pg-sub" id="org-pg-sub">Monitor all user emissions across your organization</div>
+        </div>
+        <div style="padding:20px 32px 0">
+          <div class="metric-row" id="org-kpi-row">
+            <div class="mcard m-lime">
+              <div class="mc-label">Total Users</div>
+              <div class="mc-value lime" id="org-users">0</div>
+            </div>
+            <div class="mcard m-pink">
+              <div class="mc-label">Total CO₂</div>
+              <div class="mc-value pink" id="org-total-co2">0</div>
+              <div class="mc-unit">kg this month</div>
+            </div>
+            <div class="mcard m-orange">
+              <div class="mc-label">Avg Risk Score</div>
+              <div class="mc-value orange" id="org-avg-risk">0%</div>
+            </div>
+            <div class="mcard m-blue">
+              <div class="mc-label">High Risk Users</div>
+              <div class="mc-value blue" id="org-highrisk">0</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="ct-icon">👥</span> All Users — Emission Log</div>
+            <div style="overflow-x:auto">
+              <table class="org-table" id="org-user-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>State</th>
+                    <th>Electricity</th>
+                    <th>Transport</th>
+                    <th>LPG</th>
+                    <th>Total CO₂</th>
+                    <th>Risk</th>
+                    <th>Profile</th>
+                    <th>Logged At</th>
+                  </tr>
+                </thead>
+                <tbody id="org-table-body">
+                  <tr>
+                    <td colspan="9" style="text-align:center;color:#aaa;padding:24px">No user data yet. Users need to
+                      run their analysis first.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="ct-icon">🌍</span> India National Stats · MoEFCC 2023–24</div>
+            <div class="metric-row">
+              <div class="mcard m-pink">
+                <div class="mc-label">Total CO₂</div>
+                <div class="mc-value pink">3.9</div>
+                <div class="mc-unit">Gt / year</div>
+              </div>
+              <div class="mcard m-orange">
+                <div class="mc-label">Global Rank</div>
+                <div class="mc-value orange">#3</div>
+              </div>
+              <div class="mcard m-lime">
+                <div class="mc-label">Per-capita</div>
+                <div class="mc-value lime">1.9</div>
+                <div class="mc-unit">t / year</div>
+              </div>
+              <div class="mcard m-blue">
+                <div class="mc-label">Renewable</div>
+                <div class="mc-value blue">43%</div>
+              </div>
+              <div class="mcard m-teal">
+                <div class="mc-label">Solar Installed</div>
+                <div class="mc-value" style="color:#005f6b">82 GW</div>
+              </div>
+              <div class="mcard m-lime">
+                <div class="mc-label">EV Sales FY24</div>
+                <div class="mc-value lime">1.68M</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ════════════════════════════════════════════════════
+    //  STATE
+    // ════════════════════════════════════════════════════
+    let currentUser = null;  // {name, email, state, role:'user'|'org', orgName?}
+    const userLogs = JSON.parse(localStorage.getItem('ciq_logs') || '[]');
+
+    // ════════════════════════════════════════════════════
+    //  LOGIN
+    // ════════════════════════════════════════════════════
+    function switchLoginTab(tab, el) {
+      document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('userLoginForm').style.display = tab === 'user' ? 'block' : 'none';
+      document.getElementById('orgLoginForm').style.display = tab === 'org' ? 'block' : 'none';
+    }
+
+    function doUserLogin() {
+      const name = document.getElementById('loginName').value.trim();
+      const email = document.getElementById('loginEmail').value.trim();
+      const state = document.getElementById('loginState').value;
+      if (!name || !email || !state) { showToast('Fill all fields first! 👆'); return; }
+      currentUser = { name, email, state, role: 'user' };
+      bootApp();
+    }
+
+    function doOrgLogin() {
+      const orgName = document.getElementById('orgName').value.trim();
+      const pass = document.getElementById('orgPass').value;
+      if (!orgName || !pass) { showToast('Enter org name & password! 👆'); return; }
+      if (pass !== 'admin123') { showToast('Wrong password! Demo: admin123'); return; }
+      currentUser = { name: orgName, email: document.getElementById('orgEmail').value, state: 'India', role: 'org', orgName };
+      bootApp();
+    }
+
+    function bootApp() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('appShell').style.display = 'flex';
+
+      // Update sidebar
+      const initials = currentUser.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+      document.getElementById('user-avatar').textContent = initials;
+      document.getElementById('sidebar-username').textContent = currentUser.name;
+      document.getElementById('top-user-label').textContent = `${currentUser.name}  ·  ${currentUser.role === 'org' ? 'Org Admin' : currentUser.state}`;
+
+      // Org nav
+      if (currentUser.role === 'org') {
+        document.getElementById('nav-org').style.display = 'flex';
+        document.getElementById('org-nav-section').style.display = 'block';
+        setPage('org', document.getElementById('nav-org'));
+        document.getElementById('org-pg-title').innerHTML = currentUser.orgName + ' <em>Dashboard</em>';
+        document.getElementById('org-pg-sub').textContent = 'Monitoring carbon emissions for all users in your organization';
+        refreshOrgTable();
+      }
+
+      startClock();
+      showToast(`Welcome, ${currentUser.name}! 🌍`);
+    }
+
+    function doLogout() {
+      currentUser = null;
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('appShell').style.display = 'none';
+      document.getElementById('loginName').value = '';
+      document.getElementById('loginEmail').value = '';
+    }
+
+    // ════════════════════════════════════════════════════
+    //  NAVIGATION
+    // ════════════════════════════════════════════════════
+    const moods = {
+      individual: 'Ready to track! 🌍',
+      methane: 'Sniffing CH₄… 💨',
+      aqi: 'Checking the air 🌫️',
+      policy: 'Reading green laws 📋',
+      org: 'Admin mode active 🏢'
+    };
+
+    function setPage(id, el) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      el.classList.add('active');
+      document.getElementById('vayundhra-mood').textContent = moods[id] || 'Online 🌱';
+      if (id === 'org') refreshOrgTable();
+    }
+
+    // ════════════════════════════════════════════════════
+    //  CLOCK
+    // ════════════════════════════════════════════════════
+    function startClock() {
+      setInterval(() => {
+        document.getElementById('session-clock').textContent = new Date().toLocaleTimeString('en-IN');
+      }, 1000);
+    }
+
+    // ════════════════════════════════════════════════════
+    //  INDIVIDUAL MODE — ANALYSIS
+    // ════════════════════════════════════════════════════
+    async function runAnalysis() {
+      const units = parseFloat(document.getElementById('units').value) || 0;
+      const distance = parseFloat(document.getElementById('distance').value) || 0;
+      const cylinders = parseFloat(document.getElementById('cylinders').value) || 0;
+      const transport = document.getElementById('transport').value;
+      const vehicle = document.getElementById('vehicle').value;
+      const state = currentUser?.state || 'Tamil Nadu';
+
+      document.getElementById('btn-spin').style.display = 'block';
+      document.getElementById('btn-label').textContent = 'Analysing...';
+
+      let resp;
+      try {
+        // Single call to /analyze — same endpoint as Streamlit uses
+        const r = await fetch('http://localhost:5000/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ units, distance, cylinders, transport, vehicle, state })
+        });
+        if (!r.ok) throw new Error('Backend error: ' + r.status);
+        resp = await r.json();
+      } catch (e) {
+        console.error('Backend unreachable:', e);
+        document.getElementById('btn-spin').style.display = 'none';
+        document.getElementById('btn-label').textContent = 'Analyse Footprint';
+        alert('Could not connect to backend. Make sure python run.py is running.');
+        return;
+      }
+
+      renderResults(resp);
+
+      // Log for org dashboard
+      if (currentUser) {
+        const entry = {
+          name: currentUser.name,
+          email: currentUser.email,
+          state: state,
+          units, distance, cylinders, transport, vehicle,
+          electricity_co2: resp.emissions.electricity,
+          transport_co2: resp.emissions.transport,
+          lpg_co2: resp.emissions.lpg,
+          total_co2: resp.emissions.total,
+          predicted_co2: resp.ml.predicted,
+          risk_score: resp.ml.risk,
+          cluster_label: resp.ml.profile,
+          logged_at: new Date().toLocaleString('en-IN')
+        };
+        const idx = userLogs.findIndex(u => u.email === currentUser.email);
+        if (idx >= 0) userLogs[idx] = entry; else userLogs.push(entry);
+        localStorage.setItem('ciq_logs', JSON.stringify(userLogs));
+      }
+
+      document.getElementById('btn-spin').style.display = 'none';
+      document.getElementById('btn-label').textContent = 'Analyse Footprint';
+
+      getAIAdvice(resp.emissions, resp.ml, resp.context, resp.local);
+    }
+
+    function renderResults(resp) {
+      const em = resp.emissions;
+      const ml = resp.ml;
+      const ctx = resp.context;
+      const loc = resp.local;
+
+      const panel = document.getElementById('result-panel');
+      panel.classList.add('show');
+
+      // Core metrics — now from /analyze, identical to Streamlit
+      document.getElementById('r-total').textContent = em.total + ' kg';
+      document.getElementById('r-predicted').textContent = ml.predicted + ' kg';
+
+      const r = ml.risk;
+      const rEl = document.getElementById('r-risk');
+      rEl.textContent = r + '%';
+      rEl.className = 'mc-value ' + (r > 66 ? 'red' : r > 33 ? 'orange' : 'lime');
+
+      document.getElementById('r-cluster').textContent = ml.profile;
+      document.getElementById('r-cluster-id').textContent = 'Cluster ' + ml.cluster_id;
+
+      // New: vs national avg
+      const vsNat = ctx.vs_national;
+      const vsEl = document.getElementById('r-vs-nat');
+      vsEl.textContent = (vsNat >= 0 ? '+' : '') + vsNat + ' kg';
+      vsEl.style.color = vsNat > 0 ? '#f97316' : '#5a8a00';
+
+      // New: compound risk (CO2 + AQI penalty)
+      const cr = ml.compound_risk;
+      const crEl = document.getElementById('r-compound');
+      crEl.textContent = cr + '%';
+      crEl.className = 'mc-value ' + (cr > 66 ? 'red' : cr > 33 ? 'orange' : 'lime');
+
+      // Risk bar
+      const fill = document.getElementById('risk-fill');
+      fill.style.width = r + '%';
+      fill.style.background = r > 66 ? '#ff4757' : r > 33 ? '#ff7a2f' : '#5a8a00';
+      fill.setAttribute('data-pct', r + '%');
+      document.getElementById('risk-text').innerHTML = r > 66
+        ? '<span style="color:var(--red);font-weight:900">High Risk — Action needed now!</span>'
+        : r > 33
+          ? '<span style="color:var(--orange);font-weight:900">Moderate — Room to improve</span>'
+          : '<span style="color:#5a8a00;font-weight:900">Low — Great job! Keep it up</span>';
+
+      // Emission breakdown bars
+      const total = em.total || 1;
+      const sources = [
+        { name: 'Electricity', val: em.electricity, color: '#4FC3F7' },
+        { name: 'Transport', val: em.transport, color: '#fbbf24' },
+        { name: 'LPG / Gas', val: em.lpg, color: '#f97316' }
+      ];
+      document.getElementById('bk-bars').innerHTML = sources.map(s => {
+        const pct = Math.round((s.val / total) * 100);
+        return `<div class="bk-item">
+      <div class="bk-row"><span class="bk-name">${s.name}</span><span class="bk-val">${s.val} kg (${pct}%)</span></div>
+      <div class="bk-track"><div class="bk-fill" style="width:${pct}%;background:${s.color}"></div></div>
+    </div>`;
+      }).join('');
+
+      // Local context — nearby methane sites
+      const sites = loc.methane_sites || {};
+      const siteNames = Object.keys(sites);
+      const siteBox = document.getElementById('local-context-box');
+      if (siteNames.length > 0 && siteBox) {
+        const s = sites[siteNames[0]];
+        siteBox.style.display = 'block';
+        document.getElementById('local-site-text').innerHTML =
+          `<strong>Nearby landfill in your state:</strong> ${siteNames[0]} — ` +
+          `emits <strong>${s.ch4_kt} kt CH4/year</strong> (Global Rank #${s.rank_global}). ` +
+          `${s.note}`;
+      }
+
+      // AQI for user's cities
+      const aqis = loc.city_aqi || {};
+      const aqiBox = document.getElementById('local-aqi-box');
+      if (Object.keys(aqis).length > 0 && aqiBox) {
+        aqiBox.style.display = 'block';
+        document.getElementById('local-aqi-text').innerHTML = Object.entries(aqis)
+          .map(([city, d]) => `<strong>${city}</strong>: AQI ${d.aqi} — <span style="color:${d.aqi > 200 ? '#ff4757' : d.aqi > 100 ? '#f97316' : '#5a8a00'}">${d.category}</span>`)
+          .join('  |  ');
+      }
+
+      // Optimization tips from backend
+      const tips = resp.tips || [];
+      const tipsBox = document.getElementById('backend-tips');
+      if (tips.length > 0 && tipsBox) {
+        tipsBox.innerHTML = tips.map(t => `
+      <div style="background:#fff;border:2.5px solid #111;border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:3px 3px 0 #111">
+        <div style="font-weight:900;font-size:12px;margin-bottom:4px">${t.title}</div>
+        <div style="font-size:11px;color:rgba(0,0,0,0.6);line-height:1.6">${t.detail}</div>
+        ${t.saving > 0 ? `<div style="margin-top:6px;font-size:11px;font-weight:900;color:#5a8a00">Save ~${t.saving} kg CO2/month</div>` : ''}
+      </div>`).join('');
+      }
+    }
+
+    async function getAIAdvice(em, ml, ctx, loc) {
+      const box = document.getElementById('ai-advice-box');
+      box.style.display = 'block';
+      document.getElementById('ai-spin').style.display = 'block';
+      document.getElementById('ai-text').textContent = 'Thinking...';
+
+      // Build rich India-specific context for Groq via backend
+      const aqiCities = Object.entries(loc.city_aqi || {}).map(([c, d]) => `${c} AQI:${d.aqi}`).join(', ');
+      const methaneSites = Object.keys(loc.methane_sites || {}).join(', ');
+      const policy = loc.policy || {};
+
+      const prompt = `You are vayundhra, CarbonIQ's friendly AI advisor for India.
+User data: state=${ctx.state}, electricity=${em.electricity}kg, transport=${em.transport}kg, LPG=${em.lpg}kg, total=${em.total}kg/month.
+State grid factor: ${ctx.state_ef} kg CO2/kWh. Vs national avg: ${ctx.vs_national > 0 ? '+' : ''}${ctx.vs_national} kg.
+Risk score: ${ml.risk}%. Compound risk (with local AQI): ${ml.compound_risk}%.
+Local city AQI: ${aqiCities || 'not available'}.
+Nearby methane sites: ${methaneSites || 'none tracked'}.
+State EV policy: ${policy.ev_policy ? 'Yes — ' + (policy.key_policy || '') : 'No'}.
+Give 2-3 specific, India-relevant, actionable tips. Be friendly, concise (under 130 words). No bullet asterisks.`;
+
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 220,
+            system: 'You are vayundhra, a friendly, knowledgeable carbon footprint advisor for India. Give practical, state-specific advice. Be warm and encouraging.',
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
+        const data = await res.json();
+        document.getElementById('ai-text').textContent = data.content?.[0]?.text || fallbackAdvice(em, ctx);
+      } catch (e) {
+        document.getElementById('ai-text').textContent = fallbackAdvice(em, ctx);
+      }
+      document.getElementById('ai-spin').style.display = 'none';
+    }
+
+    function fallbackAdvice(em, ctx) {
+      const tips = [];
+      if (em.electricity > 100) tips.push(`Your state (${ctx.state}) grid emits ${ctx.state_ef} kg/kWh. Rooftop solar with MNRE 40% subsidy can cut this by 35%.`);
+      if (em.transport > 50) tips.push("Switch to CNG or EV — FAME-II offers up to Rs 15,000 on 2-wheelers.");
+      if (em.lpg > 40) tips.push("Induction cooking on your state grid reduces cooking emissions by 50%.");
+      if (!tips.length) tips.push("Great footprint! Explore India's Green Credit Programme on iGOT Karmayogi portal for offsets.");
+      return tips.join(" ");
+    }
+
+    function clearCalc() {
+      ['units', 'distance', 'cylinders'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('result-panel').classList.remove('show');
+    }
+
+    // ════════════════════════════════════════════════════
+    //  METHANE DATA
+    // ════════════════════════════════════════════════════
+    const METHANE = {
+      "Secunderabad – Jawaharnagar": { ch4: 48.2, city: 'Hyderabad', state: 'Telangana', area: 247, since: 1986, daily: 2800, rank: 3, note: 'Ranked 3rd globally for landfill methane in 2025 satellite data. Covers 247 hectares.' },
+      "Deonar – Mumbai": { ch4: 41.7, city: 'Mumbai', state: 'Maharashtra', area: 132, since: 1927, daily: 3500, rank: 7, note: "Asia's oldest active landfill, operational since 1927. Receives 3,500 tonnes/day." },
+      "Bhalswa – Delhi": { ch4: 36.4, city: 'Delhi', state: 'Delhi', area: 54, since: 1994, daily: 2200, rank: 12, note: "The 'Bhalswa mountain' stands ~60 metres high. One of Delhi's three legacy landfills." },
+      "Ghazipur – Delhi": { ch4: 34.1, city: 'Delhi', state: 'Delhi', area: 70, since: 1984, daily: 2000, rank: 15, note: 'Taller than Qutub Minar. Partial collapse in 2017. Scheduled for closure since 2002.' },
+      "Perungudi – Chennai": { ch4: 18.3, city: 'Chennai', state: 'Tamil Nadu', area: 140, since: 1980, daily: 1400, rank: 41, note: 'Officially closed 2016 but continues receiving waste. Near Pallikaranai marshland.' },
+      "Brahmapuram – Kochi": { ch4: 12.1, city: 'Kochi', state: 'Kerala', area: 100, since: 2005, daily: 900, rank: 68, note: 'Massive fire in March 2023 burned for weeks, spreading toxic smoke across Kochi.' }
+    };
+
+    function initMethaneChart() {
+      const max = Math.max(...Object.values(METHANE).map(m => m.ch4));
+      document.getElementById('methane-chart').innerHTML = Object.entries(METHANE).map(([name, d]) => {
+        const pct = Math.round((d.ch4 / max) * 100);
+        const col = d.ch4 > 40 ? '#FF4757' : d.ch4 > 20 ? '#FF7A2F' : '#C8E63C';
+        return `<div class="bc-row">
+      <div class="bc-name">${name.split('–')[0].trim()}</div>
+      <div class="bc-track"><div class="bc-fill" style="width:${pct}%;background:${col}">
+        <span class="bc-fillval">${d.ch4} kt</span>
+      </div></div>
+    </div>`;
+      }).join('');
+    }
+
+    function showMethaneDetail(name) {
+      if (!name) return;
+      const d = METHANE[name];
+      document.getElementById('methane-detail').innerHTML = `
+    <div style="font-family:'Fredoka One',cursive;font-size:32px;color:var(--orange);margin-bottom:10px">${d.ch4} kt/yr</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div>📍 <strong>${d.city}</strong>, ${d.state}</div>
+      <div>🌐 Global Rank <strong>#${d.rank}</strong></div>
+      <div>📐 Area: <strong>${d.area} ha</strong></div>
+      <div>🗓️ Since <strong>${d.since}</strong></div>
+      <div colspan="2">♻️ Daily waste: <strong>${d.daily.toLocaleString()} t/day</strong></div>
+    </div>
+    <div style="background:#fff8e1;border:2px solid #111;border-radius:8px;padding:10px;font-size:11px;line-height:1.65;color:#333">${d.note}</div>`;
+    }
+
+    // ════════════════════════════════════════════════════
+    //  AQI DATA
+    // ════════════════════════════════════════════════════
+    const AQI = {
+      Delhi: { aqi: 312, pm25: 89.4, pm10: 178, no2: 52, so2: 18, cat: 'Very Poor', col: '#FF4757' },
+      Mumbai: { aqi: 164, pm25: 42.1, pm10: 98, no2: 38, so2: 12, cat: 'Moderate', col: '#fbbf24' },
+      Kolkata: { aqi: 198, pm25: 58.3, pm10: 124, no2: 44, so2: 16, cat: 'Poor', col: '#f97316' },
+      Chennai: { aqi: 89, pm25: 22.1, pm10: 61, no2: 28, so2: 8, cat: 'Satisfactory', col: '#86efac' },
+      Hyderabad: { aqi: 121, pm25: 31.4, pm10: 88, no2: 35, so2: 10, cat: 'Moderate', col: '#fbbf24' },
+      Bengaluru: { aqi: 94, pm25: 24.8, pm10: 67, no2: 30, so2: 9, cat: 'Satisfactory', col: '#86efac' },
+      Ahmedabad: { aqi: 187, pm25: 52.3, pm10: 141, no2: 41, so2: 15, cat: 'Poor', col: '#f97316' },
+      Pune: { aqi: 108, pm25: 27.9, pm10: 72, no2: 32, so2: 9, cat: 'Moderate', col: '#fbbf24' },
+      Jaipur: { aqi: 224, pm25: 64.2, pm10: 158, no2: 46, so2: 19, cat: 'Poor', col: '#f97316' },
+      Lucknow: { aqi: 267, pm25: 78.1, pm10: 166, no2: 49, so2: 21, cat: 'Very Poor', col: '#FF4757' },
+      Patna: { aqi: 289, pm25: 83.4, pm10: 172, no2: 51, so2: 22, cat: 'Very Poor', col: '#FF4757' },
+      Kanpur: { aqi: 298, pm25: 86.2, pm10: 174, no2: 53, so2: 23, cat: 'Very Poor', col: '#FF4757' },
+      Varanasi: { aqi: 241, pm25: 69.8, pm10: 161, no2: 47, so2: 20, cat: 'Poor', col: '#f97316' },
+      Nagpur: { aqi: 134, pm25: 35.6, pm10: 91, no2: 36, so2: 11, cat: 'Moderate', col: '#fbbf24' },
+      Surat: { aqi: 148, pm25: 39.2, pm10: 94, no2: 37, so2: 13, cat: 'Moderate', col: '#fbbf24' },
+      Visakhapatnam: { aqi: 118, pm25: 30.1, pm10: 84, no2: 34, so2: 10, cat: 'Moderate', col: '#fbbf24' },
+      Kochi: { aqi: 72, pm25: 17.4, pm10: 48, no2: 24, so2: 7, cat: 'Good', col: '#4ade80' },
+      Coimbatore: { aqi: 81, pm25: 20.2, pm10: 54, no2: 26, so2: 7, cat: 'Satisfactory', col: '#86efac' },
+      Chandigarh: { aqi: 178, pm25: 49.1, pm10: 112, no2: 40, so2: 14, cat: 'Moderate', col: '#fbbf24' },
+      Bhopal: { aqi: 156, pm25: 41.8, pm10: 99, no2: 38, so2: 13, cat: 'Moderate', col: '#fbbf24' }
+    };
+
+    function showAQICity(city) {
+      if (!city) return;
+      const d = AQI[city];
+      const el = document.getElementById('aqi-city-result');
+      el.style.display = 'block';
+      document.getElementById('aqi-big-num').textContent = d.aqi;
+      document.getElementById('aqi-big-num').style.color = d.col;
+      const cb = document.getElementById('aqi-cat-badge');
+      cb.textContent = d.cat;
+      cb.style.background = d.col + '22';
+      cb.style.color = d.col;
+      cb.style.borderColor = d.col;
+      document.getElementById('aqi-poll-grid').innerHTML = `
+    <div class="mcard m-blue"><div class="mc-label">PM2.5</div><div class="mc-value" style="color:${d.pm25 > 25 ? '#f97316' : '#5a8a00'}">${d.pm25}</div><div class="mc-unit">µg/m³ · Safe &lt;25</div></div>
+    <div class="mcard m-lime"><div class="mc-label">PM10</div><div class="mc-value" style="color:${d.pm10 > 50 ? '#f97316' : '#5a8a00'}">${d.pm10}</div><div class="mc-unit">µg/m³ · Safe &lt;50</div></div>
+    <div class="mcard m-pink"><div class="mc-label">NO₂</div><div class="mc-value" style="color:${d.no2 > 40 ? '#f97316' : '#5a8a00'}">${d.no2}</div><div class="mc-unit">µg/m³ · Safe &lt;40</div></div>
+    <div class="mcard m-teal"><div class="mc-label">SO₂</div><div class="mc-value" style="color:${d.so2 > 20 ? '#f97316' : '#5a8a00'}">${d.so2}</div><div class="mc-unit">µg/m³ · Safe &lt;20</div></div>`;
+    }
+
+    // ════════════════════════════════════════════════════
+    //  STATE POLICY DATA
+    // ════════════════════════════════════════════════════
+    const STATES = {
+      Kerala: { ren: 52, ev: 'Yes', rating: 'A+', target: 2030, grid: 0.41, pc: 1.2, policy: 'Kerala EV Policy 2023 — 1 lakh EVs by 2025. 100% renewable power target by 2040.' },
+      Karnataka: { ren: 48, ev: 'Yes', rating: 'A', target: 2030, grid: 0.58, pc: 1.9, policy: 'Karnataka RE Policy 2022 — 10 GW solar by 2025. Bengaluru green mobility plan.' },
+      'Tamil Nadu': { ren: 44, ev: 'Yes', rating: 'A', target: 2030, grid: 0.71, pc: 1.8, policy: 'Tamil Nadu Green Energy Policy — 20 GW wind + solar by 2030.' },
+      Gujarat: { ren: 38, ev: 'Yes', rating: 'B+', target: 2030, grid: 0.88, pc: 2.8, policy: 'Hybrid & EV Policy 2021. Rann of Kutch solar park — world\'s largest single-site solar farm.' },
+      Rajasthan: { ren: 41, ev: 'Yes', rating: 'B+', target: 2030, grid: 0.89, pc: 3.0, policy: 'Rajasthan Solar Energy Policy 2019 — 30 GW solar target.' },
+      Maharashtra: { ren: 29, ev: 'Yes', rating: 'B', target: 2030, grid: 0.82, pc: 2.6, policy: 'Maharashtra EV Policy 2021. Mumbai coastal road sustainability mandate.' },
+      Telangana: { ren: 34, ev: 'Yes', rating: 'B', target: 2030, grid: 0.85, pc: 2.5, policy: 'Telangana Solar Power Policy 2020. Hyderabad metro expansion phase 3.' },
+      'Andhra Pradesh': { ren: 37, ev: 'Yes', rating: 'B', target: 2030, grid: 0.79, pc: 2.3, policy: 'AP EV Policy 2023. Renewable energy target 18 GW by 2027.' },
+      Delhi: { ren: 12, ev: 'Yes', rating: 'C+', target: 2025, grid: 0.83, pc: 1.6, policy: 'Delhi EV Policy 2020 — 25% EVs by 2024. BS-VI fuel mandate. Odd-even scheme.' },
+      'Uttar Pradesh': { ren: 14, ev: 'Yes', rating: 'C', target: 2030, grid: 0.94, pc: 3.4, policy: 'UP EV Manufacturing Policy 2022. Bundelkhand solar park.' },
+      Bihar: { ren: 8, ev: 'No', rating: 'D', target: 2035, grid: 0.95, pc: 3.1, policy: 'Bihar RE Policy 2017 — limited implementation. High coal dependency.' },
+      Jharkhand: { ren: 9, ev: 'No', rating: 'D', target: 2035, grid: 1.05, pc: 4.8, policy: 'Coal mining state — transition plan under development.' },
+      Chhattisgarh: { ren: 11, ev: 'No', rating: 'D', target: 2035, grid: 1.02, pc: 4.5, policy: 'Solar park development in early stage. Heavy industrial emission zone.' },
+      'West Bengal': { ren: 16, ev: 'No', rating: 'C', target: 2030, grid: 0.98, pc: 2.2, policy: 'West Bengal Solar Policy 2017. Kolkata tram network — oldest in Asia.' },
+      Punjab: { ren: 22, ev: 'Yes', rating: 'C+', target: 2030, grid: 0.76, pc: 1.7, policy: 'Punjab EV Policy 2022. Paddy stubble burning remains major seasonal air issue.' },
+      'Himachal Pradesh': { ren: 88, ev: 'Yes', rating: 'A+', target: 2025, grid: 0.09, pc: 0.9, policy: 'Near 100% hydro power. Green state declaration 2018.' },
+      Uttarakhand: { ren: 84, ev: 'Yes', rating: 'A+', target: 2025, grid: 0.17, pc: 0.8, policy: 'Hydro-dominant grid. Char Dham green zone policy.' },
+      Sikkim: { ren: 91, ev: 'Yes', rating: 'A+', target: 2022, grid: 0.14, pc: 0.5, policy: "India's first fully organic state. 100% renewable power achieved." },
+      Goa: { ren: 18, ev: 'Yes', rating: 'B-', target: 2030, grid: 0.71, pc: 1.1, policy: 'Goa Clean Mobility Policy 2023. Tourism-focused green infrastructure.' },
+      Odisha: { ren: 13, ev: 'No', rating: 'D+', target: 2035, grid: 0.99, pc: 4.1, policy: 'Odisha RE Policy 2022 — 10 GW target. Heavy industry + coal dependent.' },
+      'Madhya Pradesh': { ren: 28, ev: 'Yes', rating: 'C+', target: 2030, grid: 0.97, pc: 3.8, policy: 'MP Solar Energy Policy 2022. Rewa solar park — 750 MW.' },
+      Haryana: { ren: 19, ev: 'Yes', rating: 'C', target: 2030, grid: 0.91, pc: 2.9, policy: 'Haryana EV Policy 2022. Gurugram air emergency measures.' },
+      Assam: { ren: 24, ev: 'No', rating: 'C-', target: 2030, grid: 0.62, pc: 1.4, policy: 'Assam Solar Policy 2020. Oil refinery emission norms tightened.' }
+    };
+
+    const RATING_COL = { 'A+': '#2ecc71', 'A': '#27ae60', 'B+': '#f1c40f', 'B': '#e67e22', 'B-': '#d35400', 'C+': '#e74c3c', 'C': '#c0392b', 'C-': '#922b21', 'D+': '#7b241c', 'D': '#641e16' };
+
+    function showStatePolicy(name) {
+      if (!name) return;
+      const d = STATES[name];
+      if (!d) return;
+      const col = RATING_COL[d.rating] || '#888';
+      document.getElementById('state-detail').style.display = 'block';
+      const ring = document.getElementById('rating-ring');
+      ring.textContent = d.rating;
+      ring.style.borderColor = col;
+      ring.style.color = col;
+      document.getElementById('state-name-h').textContent = name;
+      document.getElementById('state-tag').textContent = d.ren > 60 ? '🌱 Green Energy Leader' : d.ren > 30 ? '⚡ Transitioning' : '⚠️ High Emission Dependency';
+      document.getElementById('state-metrics').innerHTML = `
+    <div class="mcard m-lime"><div class="mc-label">Renewable Share</div><div class="mc-value" style="color:${d.ren > 50 ? '#5a8a00' : d.ren > 30 ? '#d97706' : 'var(--red)'}">${d.ren}%</div></div>
+    <div class="mcard m-pink"><div class="mc-label">EV Policy</div><div class="mc-value" style="color:${d.ev === 'Yes' ? '#5a8a00' : 'var(--red)'}; font-size:16px;font-family:'Nunito',sans-serif;font-weight:900">${d.ev}</div></div>
+    <div class="mcard m-blue"><div class="mc-label">Net Zero Target</div><div class="mc-value blue" style="font-size:20px">${d.target}</div></div>
+    <div class="mcard m-teal"><div class="mc-label">Grid Factor</div><div class="mc-value" style="font-size:18px;color:#005f6b">${d.grid}</div><div class="mc-unit">kg CO₂/kWh</div></div>
+    <div class="mcard m-orange"><div class="mc-label">Per-capita CO₂</div><div class="mc-value orange" style="font-size:20px">${d.pc}</div><div class="mc-unit">t/year</div></div>`;
+      document.getElementById('state-policy-box').textContent = '📋 ' + d.policy;
+    }
+
+    // ════════════════════════════════════════════════════
+    //  ORG DASHBOARD
+    // ════════════════════════════════════════════════════
+    function refreshOrgTable() {
+      const logs = JSON.parse(localStorage.getItem('ciq_logs') || '[]');
+      const tbody = document.getElementById('org-table-body');
+
+      if (logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">No user data yet. Users need to run their analysis first.</td></tr>';
+        document.getElementById('org-users').textContent = '0';
+        document.getElementById('org-total-co2').textContent = '0';
+        document.getElementById('org-avg-risk').textContent = '0%';
+        document.getElementById('org-highrisk').textContent = '0';
+        return;
+      }
+
+      const totalCO2 = logs.reduce((s, u) => s + u.total_co2, 0);
+      const avgRisk = Math.round(logs.reduce((s, u) => s + u.risk_score, 0) / logs.length);
+      const highRisk = logs.filter(u => u.risk_score > 66).length;
+
+      document.getElementById('org-users').textContent = logs.length;
+      document.getElementById('org-total-co2').textContent = totalCO2.toFixed(1);
+      document.getElementById('org-avg-risk').textContent = avgRisk + '%';
+      document.getElementById('org-highrisk').textContent = highRisk;
+
+      tbody.innerHTML = logs.map(u => {
+        const rTag = u.risk_score > 66 ? 'tag-red' : u.risk_score > 33 ? 'tag-amber' : 'tag-green';
+        const rLabel = u.risk_score > 66 ? '🔴 High' : u.risk_score > 33 ? '🟡 Moderate' : '🟢 Low';
+        return `<tr>
+      <td><strong>${u.name}</strong><br><small style="color:#888">${u.email}</small></td>
+      <td>${u.state}</td>
+      <td>${u.electricity_co2} kg</td>
+      <td>${u.transport_co2} kg</td>
+      <td>${u.lpg_co2} kg</td>
+      <td><strong>${u.total_co2} kg</strong></td>
+      <td><span class="tag ${rTag}">${rLabel} ${u.risk_score}%</span></td>
+      <td><span style="font-size:11px">${u.cluster_label}</span></td>
+      <td style="font-size:10px;color:#888">${u.logged_at}</td>
+    </tr>`;
+      }).join('');
+    }
+
+    // ════════════════════════════════════════════════════
+    //  TOAST
+    // ════════════════════════════════════════════════════
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+
+    // ════════════════════════════════════════════════════
+    //  INIT
+    // ════════════════════════════════════════════════════
+    initMethaneChart();
+  </script>
+</body>
+
+</html>
