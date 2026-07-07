@@ -1,142 +1,177 @@
 import { useState } from "react";
-import { User, Building, Rocket } from "lucide-react";
+import { User, Building, Rocket, Mail } from "lucide-react";
 import { supabase } from "@/utils/supabase/client";
 
 export default function Login() {
+  const [mode, setMode] = useState<'signin' | 'signup' | 'forgot'>('signin');
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const isAdmin = (email: string) => email.toLowerCase() === 'jaishreeb21@gmail.com';
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setAuthError(null);
-    setNeedsEmailConfirmation(false);
+    setSuccessMsg(null);
+    
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const fullName = formData.get("fullName") as string;
 
-    if (email && password) {
-      setLoading(true);
-      
-      let { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      let sessionUser = data?.user;
+    if (!email) return;
 
-      if (error && error.message.includes('Email not confirmed')) {
-        setNeedsEmailConfirmation(true);
-        setLoading(false);
-        return;
-      }
+    setLoading(true);
 
-      if (error && (error.message.includes('Invalid login') || error.message.includes('User not found') || error.message.includes('credentials'))) {
-        if (!fullName) {
-          setAuthError("Full Name is required for new users.");
-          setLoading(false);
-          return;
-        }
-        const res = await supabase.auth.signUp({ 
+    try {
+      if (mode === 'forgot') {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/reset-password',
+        });
+        if (error) throw error;
+        setSuccessMsg("Password reset link sent to your email!");
+      } 
+      else if (mode === 'signup') {
+        if (!fullName) throw new Error("Full Name is required for signup.");
+        const { data, error } = await supabase.auth.signUp({ 
           email, 
           password, 
-          options: { data: { full_name: fullName || 'Admin' } } 
+          options: { data: { full_name: fullName } } 
         });
-        error = res.error;
-        sessionUser = res.data?.user;
+        if (error) throw error;
         
-        if (sessionUser && !error) {
-          // Create profile
-          await supabase.from('profiles').insert({
-            id: sessionUser.id,
-            email: sessionUser.email,
-            name: fullName || 'Admin',
+        if (data.user) {
+          await supabase.from('profiles').upsert({
+            id: data.user.id,
+            email: data.user.email,
+            name: fullName,
             role: isAdmin(email) ? 'org_admin' : 'user'
           });
         }
         
-        if (!error && sessionUser && !res.data?.session) {
-          setNeedsEmailConfirmation(true);
-          setLoading(false);
-          return;
+        if (!data.session) {
+          setSuccessMsg("Check your inbox! We sent a confirmation link.");
         }
+      } 
+      else {
+        // Sign in
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
       }
-
-      if (error || !sessionUser) {
-        setAuthError(error?.message || "Failed to authenticate.");
-        setLoading(false);
-        return;
-      }
-      
-      // onLogin is no longer needed, AuthContext will pick up the session
+    } catch (err: any) {
+      setAuthError(err.message || "An error occurred.");
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-lime flex items-center justify-center">
-      <div className="relative z-10 bg-white border-[3px] border-black rounded-[24px] shadow-neo-lg p-10 w-[460px] max-w-[95vw]">
+    <div className="fixed inset-0 z-50 bg-[url('/ghibli_bg.png')] bg-cover bg-center flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]"></div>
+      
+      <div className="relative z-10 bg-white/95 backdrop-blur-xl border-[3px] border-black rounded-[36px] shadow-[8px_8px_0_#111] p-10 w-[480px] max-w-[95vw]">
         
-        <div className="text-center mb-5">
-          <div className="w-20 h-20 rounded-full bg-[radial-gradient(circle_at_35%_30%,#a8f0c6,#26C6DA_55%,#0e7a8c)] border-[4px] border-black mx-auto mb-3 relative animate-bobb">
-            <div className="absolute top-[14px] left-[18px] w-[18px] h-[12px] bg-white/55 rounded-full -rotate-25"></div>
+        <div className="text-center mb-6">
+          <div className="w-24 h-24 rounded-full bg-white p-2 border-[4px] border-black shadow-[4px_4px_0_#111] mx-auto mb-4 relative flex items-center justify-center overflow-hidden bg-[url('/co2iq_logo.png')] bg-cover bg-center">
+            {/* If logo is transparent, it will show on white. Otherwise it covers. */}
+          </div>
+          <div className="font-fredoka text-[42px] text-black tracking-[0.5px] leading-tight">
+            Carbon<span className="text-lime-500">IQ</span>
+          </div>
+          <div className="text-center text-[14px] text-gray-600 font-medium mt-1">
+            India's AI-Powered Carbon Intelligence
           </div>
         </div>
 
-        <div className="font-fredoka text-[38px] text-black text-center tracking-[0.5px]">
-          Carbon<span className="text-pink">IQ</span>
-        </div>
-        <div className="text-center text-[13px] text-[#555] mb-7 font-semibold">
-          India's AI-powered carbon intelligence platform
-        </div>
+        {/* Tabs */}
+        {mode !== 'forgot' && (
+          <div className="flex bg-gray-100 p-1 rounded-full border-2 border-black mb-6">
+            <button 
+              onClick={() => { setMode('signin'); setAuthError(null); setSuccessMsg(null); }}
+              className={`flex-1 py-2 text-sm font-bold rounded-full transition-all ${mode === 'signin' ? 'bg-lime-300 border-2 border-black shadow-[2px_2px_0_#111]' : 'text-gray-500 hover:text-black'}`}
+            >
+              Sign In
+            </button>
+            <button 
+              onClick={() => { setMode('signup'); setAuthError(null); setSuccessMsg(null); }}
+              className={`flex-1 py-2 text-sm font-bold rounded-full transition-all ${mode === 'signup' ? 'bg-lime-300 border-2 border-black shadow-[2px_2px_0_#111]' : 'text-gray-500 hover:text-black'}`}
+            >
+              Sign Up
+            </button>
+          </div>
+        )}
 
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          {!needsEmailConfirmation && (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          
+          {mode === 'signup' && (
             <div>
-              <label className="block text-[11px] font-extrabold tracking-[0.08em] uppercase mb-[5px] text-black">Your Full Name</label>
-              <input name="fullName" placeholder="e.g. Jaishree B" className="neo-input" />
+              <label className="block text-[12px] font-extrabold tracking-[0.05em] uppercase mb-[6px] text-black">Full Name</label>
+              <input name="fullName" placeholder="e.g. Jaishree B" className="w-full bg-white border-[3px] border-black rounded-2xl px-4 py-3 font-medium outline-none focus:ring-4 focus:ring-lime-300/50 transition-all shadow-[2px_2px_0_#111]" required={mode === 'signup'} />
             </div>
           )}
+
           <div>
-            <label className="block text-[11px] font-extrabold tracking-[0.08em] uppercase mb-[5px] text-black">Email Address</label>
-            <input name="email" type="email" placeholder="you@email.com" className="neo-input" required disabled={needsEmailConfirmation} />
+            <label className="block text-[12px] font-extrabold tracking-[0.05em] uppercase mb-[6px] text-black">Email Address</label>
+            <input name="email" type="email" placeholder="you@email.com" className="w-full bg-white border-[3px] border-black rounded-2xl px-4 py-3 font-medium outline-none focus:ring-4 focus:ring-lime-300/50 transition-all shadow-[2px_2px_0_#111]" required />
           </div>
-          {!needsEmailConfirmation && (
+
+          {mode !== 'forgot' && (
             <div>
-              <label className="block text-[11px] font-extrabold tracking-[0.08em] uppercase mb-[5px] text-black">Password</label>
-              <input name="password" type="password" placeholder="••••••••" className="neo-input" required />
+              <label className="block text-[12px] font-extrabold tracking-[0.05em] uppercase mb-[6px] text-black">Password</label>
+              <input name="password" type="password" placeholder="••••••••" className="w-full bg-white border-[3px] border-black rounded-2xl px-4 py-3 font-medium outline-none focus:ring-4 focus:ring-lime-300/50 transition-all shadow-[2px_2px_0_#111]" required />
             </div>
           )}
 
-          {authError && !needsEmailConfirmation && (
-            <div className="p-3 bg-red/10 border-[2px] border-red rounded-lg text-red text-sm font-bold text-center">
+          {mode === 'signin' && (
+            <div className="text-right">
+              <button type="button" onClick={() => { setMode('forgot'); setAuthError(null); setSuccessMsg(null); }} className="text-[12px] font-bold text-gray-500 hover:text-black transition-colors">
+                Forgot Password?
+              </button>
+            </div>
+          )}
+
+          {authError && (
+            <div className="p-3 bg-red-100 border-[3px] border-red-500 rounded-xl text-red-700 text-sm font-bold text-center">
               {authError}
             </div>
           )}
 
-          {needsEmailConfirmation ? (
-            <div className="p-[20px] bg-[#FAFFF0] border-[3px] border-black shadow-[4px_4px_0_#111] rounded-[14px] text-center mt-2 animate-[slideUp_0.3s_ease]">
-              <div className="text-[16px] font-fredoka text-black mb-2 tracking-[0.3px]">Check your inbox!</div>
-              <div className="text-[13px] font-bold text-black/80 leading-[1.5]">
-                We have sent a confirmation link to your email. Please click it to verify your account before logging in.
+          {successMsg ? (
+            <div className="p-5 bg-lime-100 border-[3px] border-black shadow-[4px_4px_0_#111] rounded-2xl text-center mt-2 animate-[slideUp_0.3s_ease]">
+              <div className="text-[18px] font-fredoka text-black mb-2">Check your inbox!</div>
+              <div className="text-[14px] font-semibold text-gray-700 leading-relaxed mb-4">
+                {successMsg}
               </div>
-              <button type="button" onClick={() => setNeedsEmailConfirmation(false)} className="mt-4 text-[11px] font-black uppercase tracking-[0.1em] text-black/50 hover:text-black transition-colors">
+              <button type="button" onClick={() => setMode('signin')} className="text-[12px] font-black uppercase tracking-[0.1em] text-black/60 hover:text-black transition-colors">
                 ← Back to Login
               </button>
             </div>
           ) : (
-            <button type="submit" disabled={loading} className={`neo-btn w-full mt-2 bg-lime text-black`}>
+            <button type="submit" disabled={loading} className="w-full mt-2 bg-lime-400 hover:bg-lime-300 text-black border-[3px] border-black shadow-[4px_4px_0_#111] active:shadow-none active:translate-y-[4px] transition-all rounded-full py-3 font-bold text-[16px] flex items-center justify-center gap-2">
               {loading ? (
-                 <><div className="w-4 h-4 border-[2.5px] border-black/20 border-t-black rounded-full animate-spin"></div> Loading...</>
+                 <><div className="w-5 h-5 border-[3px] border-black/20 border-t-black rounded-full animate-spin"></div> Please wait...</>
               ) : (
-                <><Rocket size={18} strokeWidth={2.5} /> Get Started!</>
+                mode === 'forgot' ? <><Mail size={20} strokeWidth={2.5} /> Send Reset Link</> :
+                mode === 'signup' ? <><User size={20} strokeWidth={2.5} /> Create Account</> :
+                <><Rocket size={20} strokeWidth={2.5} /> Sign In</>
               )}
+            </button>
+          )}
+
+          {mode === 'forgot' && !successMsg && (
+            <button type="button" onClick={() => setMode('signin')} className="mt-4 text-[12px] font-bold text-gray-500 hover:text-black transition-colors text-center w-full">
+              ← Back to Sign In
             </button>
           )}
         </form>
 
+        <div className="mt-8 text-center text-[11px] font-bold text-gray-400">
+          By continuing, you agree to our <a href="#" className="underline hover:text-black">Terms of Service</a> & <a href="#" className="underline hover:text-black">Privacy Policy</a>
+        </div>
       </div>
     </div>
   );
