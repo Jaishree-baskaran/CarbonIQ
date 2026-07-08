@@ -76,8 +76,8 @@ export default function Login() {
       <div className="relative z-10 bg-white/95 backdrop-blur-xl border-[3px] border-black rounded-[36px] shadow-[8px_8px_0_#111] p-10 w-[480px] max-w-[95vw]">
         
         <div className="text-center mb-6">
-          <div className="w-24 h-24 rounded-full bg-white p-2 border-[4px] border-black shadow-[4px_4px_0_#111] mx-auto mb-4 relative flex items-center justify-center overflow-hidden bg-[url('/co2iq_logo.png')] bg-cover bg-center">
-            {/* If logo is transparent, it will show on white. Otherwise it covers. */}
+          <div className="w-[180px] h-20 bg-white p-2 border-[3px] border-black rounded-2xl shadow-[4px_4px_0_#111] mx-auto mb-4 relative flex items-center justify-center overflow-hidden bg-[url('/co2iq_logo.png')] bg-contain bg-center bg-no-repeat">
+            {/* Logo image rendered as background contain */}
           </div>
           <div className="font-fredoka text-[42px] text-black tracking-[0.5px] leading-tight">
             Carbon<span className="text-lime-500">IQ</span>

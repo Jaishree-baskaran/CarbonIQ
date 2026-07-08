@@ -23,11 +23,8 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
       <header className="max-w-[1400px] mx-auto px-6 h-[80px] flex items-center justify-between">
         
         {/* Logo Area */}
-        <div className="flex items-center pr-8 gap-3">
-          <Image src="/co2iq_logo.png" alt="CarbonIQ Logo" width={38} height={38} className="object-contain rounded-full" />
-          <div className="font-extrabold text-[28px] tracking-tight text-[#111] font-fredoka flex items-center">
-            carbon<span className="text-[#7C9F47] relative">i<Leaf size={14} className="absolute -top-[10px] -right-[5px] text-[#4e8b2c]" fill="currentColor" strokeWidth={1} />q</span>
-          </div>
+        <div className="flex items-center pr-8">
+          <Image src="/co2iq_logo.png" alt="CarbonIQ Logo" width={115} height={36} className="object-contain" priority />
         </div>
 
         {/* Navigation Links */}
