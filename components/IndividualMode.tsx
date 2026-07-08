@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { STATE_GRID_FACTORS } from "@/utils/data";
 import { supabase } from "@/utils/supabase/client";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
-import { BarChart3, Search, TrendingUp, MapPin, Zap, Car, Flame, Route, Leaf, Trophy, Target, Award, BrainCircuit, Activity, TreePine, Download, CheckCircle2, Circle } from "lucide-react";
+import { BarChart3, Search, TrendingUp, MapPin, Zap, Car, Flame, Route, Leaf, Trophy, Target, Award, BrainCircuit, Activity, TreePine, Download, CheckCircle2, Circle, Trash2 } from "lucide-react";
 import Image from "next/image";
 
 const TF: any = {
@@ -180,6 +180,14 @@ export default function IndividualMode({ userId }: { userId?: string }) {
     
     setLoading(false);
     setActiveTab("Dashboard");
+  };
+
+  const handleResetLogs = () => {
+    if (window.confirm("Are you sure you want to clear your emission history?")) {
+      setHistory([]);
+      localStorage.removeItem('co2iq_history');
+      setActiveTab("Analyse");
+    }
   };
 
   const toggleChallenge = (id: number) => {
@@ -455,7 +463,12 @@ export default function IndividualMode({ userId }: { userId?: string }) {
         <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#E5E7EB] animate-[fadeIn_0.3s_ease]">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-[18px] font-bold text-[#291100] flex items-center gap-2"><TrendingUp size={20} className="text-[#657733]"/> Your Emission History</h2>
-            <button className="text-[12px] font-bold flex items-center gap-1 text-[#1D4ED8] bg-[#EFF6FF] px-3 py-1.5 rounded-lg"><Download size={14}/> Export CSV</button>
+            <button 
+              onClick={handleResetLogs} 
+              className="text-[12px] font-bold flex items-center gap-1 text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors border border-red-200"
+            >
+              <Trash2 size={14}/> Reset Logs
+            </button>
           </div>
           
           {history.length > 0 ? (
