@@ -19,16 +19,13 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
     : commonTabs;
 
   return (
-    <div className="w-full px-4 pt-6 pb-2 sticky top-0 z-50">
+    <div className="w-full px-4 pt-6 pb-2 relative z-50">
       <header className="max-w-[1200px] mx-auto bg-white/95 backdrop-blur-xl rounded-[40px] shadow-[0_8px_32px_rgba(0,0,0,0.06)] border border-white/80 p-2.5 flex items-center justify-between">
         
         {/* Logo Area */}
-        <div className="flex items-center gap-3 pl-2 pr-6">
-          <div className="w-9 h-9 relative bg-white rounded-xl flex items-center justify-center text-[#291100] shadow-sm overflow-hidden border border-gray-100">
+        <div className="flex items-center gap-3 pl-2 pr-2 md:pr-6">
+          <div className="w-10 h-10 relative bg-white rounded-xl flex items-center justify-center text-[#291100] shadow-sm overflow-hidden border border-gray-100">
             <Image src="/co2_logo.png" alt="CarbonIQ" fill className="object-cover" />
-          </div>
-          <div className="font-extrabold text-[22px] tracking-tight text-[#111] font-fredoka">
-            Carbon<span className="text-lime-600">IQ</span>
           </div>
         </div>
 
