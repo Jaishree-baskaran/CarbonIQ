@@ -65,8 +65,8 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
               {(profile?.full_name || user?.email || "US").substring(0, 2).toUpperCase()}
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[12px] font-bold text-gray-800 leading-tight mb-0.5">{profile?.full_name || user?.email?.split('@')[0] || "User"}</span>
-              <span className="text-[9px] font-extrabold tracking-wider text-[#6DA02E] uppercase">{profile?.role?.replace('_', ' ')}</span>
+              <span className="text-[12px] font-bold text-gray-800 leading-tight mb-0.5 whitespace-nowrap">{profile?.full_name || user?.email?.split('@')[0] || "User"}</span>
+              <span className="text-[9px] font-extrabold tracking-wider text-[#6DA02E] uppercase whitespace-nowrap">{profile?.role?.replace('_', ' ')}</span>
             </div>
           </div>
 
