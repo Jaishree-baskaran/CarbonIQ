@@ -532,7 +532,7 @@ export default function IndividualMode({ userId }: { userId?: string }) {
                       {c.done ? <CheckCircle2 className="text-[#657733]" size={20} /> : <Circle className="text-[#D1D5DB]" size={20} />}
                       <span className={`text-[14px] font-bold ${c.done ? 'text-[#657733] line-through opacity-70' : 'text-[#291100]'}`}>{c.text}</span>
                     </div>
-                    <div className="bg-[#D4C04D] text-[#D4C04D] text-[11px] font-black px-2 py-1 rounded-md">+{c.xp} XP</div>
+                    <div className="bg-[#FDE047] text-black text-[11px] font-black px-2 py-1 rounded-md border border-black shadow-[1px_1px_0_#111]">+{c.xp} XP</div>
                  </div>
                ))}
              </div>
