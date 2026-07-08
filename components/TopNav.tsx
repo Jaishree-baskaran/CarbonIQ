@@ -1,5 +1,6 @@
 import { LogOut, User, MapPin, CloudRain, Wind, ShieldCheck, Home, Leaf } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
 
 export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: string) => void }) {
   const { signOut, profile, user } = useAuth();
@@ -22,7 +23,8 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
       <header className="max-w-[1400px] mx-auto px-6 h-[80px] flex items-center justify-between">
         
         {/* Logo Area */}
-        <div className="flex items-center pr-8">
+        <div className="flex items-center pr-8 gap-3">
+          <Image src="/co2iq_logo.png" alt="CarbonIQ Logo" width={38} height={38} className="object-contain rounded-full" />
           <div className="font-extrabold text-[28px] tracking-tight text-[#111] font-fredoka flex items-center">
             carbon<span className="text-[#7C9F47] relative">i<Leaf size={14} className="absolute -top-[10px] -right-[5px] text-[#4e8b2c]" fill="currentColor" strokeWidth={1} />q</span>
           </div>
