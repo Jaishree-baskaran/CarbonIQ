@@ -24,25 +24,33 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("AuthContext: useEffect mounted");
     // Check active session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("AuthContext: getSession resolved, session:", session);
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id, session.user.email);
       } else {
+        console.log("AuthContext: no session, setting loading to false");
         setLoading(false);
       }
+    }).catch(err => {
+      console.error("AuthContext: getSession rejected:", err);
+      setLoading(false);
     });
 
     // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("AuthContext: onAuthStateChange event:", _event, "session:", session);
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id, session.user.email);
       } else {
         setProfile(null);
+        console.log("AuthContext: onAuthStateChange no session, setting loading to false");
         setLoading(false);
       }
     });
@@ -53,6 +61,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const fetchProfile = async (userId: string, email: string | undefined) => {
+    console.log("AuthContext: fetchProfile starting for", userId);
     try {
       let { data, error } = await supabase
         .from("profiles")
@@ -60,6 +69,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         .eq("id", userId)
         .single();
         
+      console.log("AuthContext: fetchProfile DB result:", { data, error });
       if (error || !data) {
         console.warn("Profile not found in profiles table, using fallback.");
         const isAdmin = email?.toLowerCase() === 'jaishreeb21@gmail.com';
@@ -70,8 +80,9 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
       }
       setProfile(data);
     } catch (e) {
-      console.error(e);
+      console.error("AuthContext: fetchProfile exception:", e);
     } finally {
+      console.log("AuthContext: fetchProfile finally, setting loading to false");
       setLoading(false);
     }
   };
