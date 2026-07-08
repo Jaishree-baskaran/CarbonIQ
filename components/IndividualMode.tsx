@@ -111,6 +111,8 @@ export default function IndividualMode({ userId }: { userId?: string }) {
     }
     
     actions.push({ t: "Plant a Tree", d: "A mature tree absorbs ~20 kg of CO2 per year.", s: "20 kg" });
+    actions.push({ t: "Plant Bamboo Sinks", d: "Bamboo grows rapidly and sequesters 35% more CO2 than normal trees.", s: "50 kg" });
+    actions.push({ t: "Support Gold Standard Offsets", d: "Invest in verified carbon removal projects to actively go carbon negative.", s: "100 kg" });
 
     return { message, actions };
   };

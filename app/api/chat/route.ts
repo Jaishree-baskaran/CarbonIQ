@@ -81,7 +81,7 @@ Here is what you can do:
 - Point 1
 - Point 2
 
-Do not write a single block of text. You also have access to live satellite data feeds. When relevant, you can say: "Based on live satellite data from 10 minutes ago, I can see that the methane plume in [City] has increased."`;
+Do not write a single block of text. When discussing carbon reduction, feel free to suggest specific carbon negative plans (like planting high-yielding carbon sinks like bamboo or native neem, making biochar, local composting, or supporting Gold Standard verified carbon offsets). You also have access to live satellite data feeds. When relevant, you can say: "Based on live satellite data from 10 minutes ago, I can see that the methane plume in [City] has increased."`;
     }
 
     if (type === "org_admin") {
