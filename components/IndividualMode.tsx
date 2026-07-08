@@ -225,7 +225,7 @@ export default function IndividualMode({ userId }: { userId?: string }) {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 font-nunito max-w-[1100px] mx-auto">
+    <div className="w-full flex flex-col gap-6 font-nunito max-w-[1200px] mx-auto">
       
       {/* Header Banner */}
       <div className="w-full h-[200px] min-h-[200px] rounded-[36px] overflow-hidden relative shadow-md border-[3px] border-white bg-white flex-shrink-0">
@@ -238,7 +238,7 @@ export default function IndividualMode({ userId }: { userId?: string }) {
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[13px] whitespace-nowrap transition-all ${
+            className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-[13px] whitespace-nowrap transition-all w-[150px] ${
               activeTab === t.id 
                 ? "bg-[#657733] text-white shadow-md" 
                 : "text-[#6B7280] hover:bg-[#F3F4F6]"

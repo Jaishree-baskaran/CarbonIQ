@@ -20,7 +20,7 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
 
   return (
     <div className="w-full sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
-      <header className="max-w-[1400px] mx-auto px-6 h-[80px] flex items-center justify-between">
+      <header className="max-w-[1200px] mx-auto px-6 h-[80px] flex items-center justify-between">
         
         {/* Logo Area */}
         <div className="flex items-center pr-8">
@@ -35,7 +35,7 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
               <button
                 key={item.id}
                 onClick={() => setMode(item.id)}
-                className={`flex items-center gap-2.5 px-5 py-2.5 rounded-full transition-all relative ${
+                className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-full transition-all relative w-[155px] ${
                   isActive 
                     ? "bg-[#F4F7EE] text-[#111] font-bold shadow-[inset_0_1px_4px_rgba(0,0,0,0.02)]" 
                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-800 font-medium"

@@ -54,7 +54,7 @@ export default function Home() {
       <TopNav mode={mode || "Individual Mode"} setMode={setMode} />
       
       <main className="flex-1 overflow-y-scroll z-10 flex flex-col">
-        <div className={`p-6 md:p-10 ${mode === "Organization Dashboard" ? "w-full" : "max-w-[1200px] mx-auto"}`}>
+        <div className="p-6 md:p-10 w-full max-w-[1200px] mx-auto flex-1 flex flex-col">
           {mode === "Individual Mode" && <IndividualMode userId={user.id} />}
           {mode === "Village Hub" && <VillageMode />}
           {mode === "India Methane Tracker" && <MethaneTracker />}

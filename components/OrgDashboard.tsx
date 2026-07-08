@@ -88,7 +88,7 @@ export default function OrgDashboard() {
   );
 
   return (
-    <div className="w-full font-sans bg-transparent max-w-[1400px] mx-auto mt-4 pb-12">
+    <div className="w-full font-sans bg-transparent max-w-[1200px] mx-auto mt-4 pb-12">
 
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 px-2">
