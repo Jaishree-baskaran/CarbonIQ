@@ -47,8 +47,8 @@ export default function Home() {
     <div className={`flex flex-col w-full min-h-screen text-[#291100] relative`}>
       {/* Breezy Landscape Background */}
       <div className="fixed inset-0 z-[-1] bg-[#F4F7F4]">
-        <Image src="/breezy_bg.png" alt="Breezy Landscape" fill className="object-cover opacity-[0.8]" priority />
-        <div className="absolute inset-0 bg-white/40 backdrop-blur-[4px] pointer-events-none"></div>
+        <Image src="/breezy_bg.png" alt="Breezy Landscape" fill className="object-cover opacity-100" priority />
+        <div className="absolute inset-0 bg-white/10 pointer-events-none"></div>
       </div>
 
       <TopNav mode={mode || "Individual Mode"} setMode={setMode} />
