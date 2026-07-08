@@ -134,9 +134,9 @@ export default function MethaneTracker() {
           </div>
           <p className="text-[12px] font-medium text-black leading-[1.6]">Landfill gas capture can convert CH₄ to electricity. Jawaharnagar alone could power ~30,000 homes.</p>
         </div>
-        <div className="neo-card bg-pink text-white">
-          <div className="font-fredoka text-[16px] tracking-[0.3px] mb-[14px] flex items-center gap-[8px]">
-            <Archive size={20} strokeWidth={2.5} className="text-white" /> Waste Segregation
+        <div className="neo-card text-black" style={{ backgroundColor: '#FF5FA0' }}>
+          <div className="font-fredoka text-[16px] tracking-[0.3px] mb-[14px] flex items-center gap-[8px] text-black">
+            <Archive size={20} strokeWidth={2.5} className="text-black" /> Waste Segregation
           </div>
           <p className="text-[12px] font-medium text-black leading-[1.6]">Wet waste composting reduces methane by up to 70%. Swachh Bharat Phase 2 mandates 100% source segregation.</p>
         </div>

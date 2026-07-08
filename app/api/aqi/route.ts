@@ -54,18 +54,10 @@ export async function GET(request: Request) {
     });
 
   } catch (error: any) {
-    // Mock fallback just in case
+    console.error("AQI API error:", error);
     return NextResponse.json({ 
-      success: true, 
-      data: {
-        aqi: Math.floor(Math.random() * 300) + 50,
-        category: "Moderate",
-        pm25: (Math.random() * 100).toFixed(1),
-        pm10: (Math.random() * 150).toFixed(1),
-        no2: (Math.random() * 50).toFixed(1),
-        so2: (Math.random() * 20).toFixed(1)
-      },
-      fallback: true
-    });
+      success: false, 
+      error: error.message || "Failed to fetch air quality data"
+    }, { status: 500 });
   }
 }

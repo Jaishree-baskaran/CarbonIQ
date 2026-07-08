@@ -11,6 +11,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "CarbonIQ India",
   description: "AI Emission Intelligence",
+  icons: {
+    icon: "/co2iq_logo.png",
+  }
 };
 
 export default function RootLayout({
