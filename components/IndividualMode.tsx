@@ -228,7 +228,7 @@ export default function IndividualMode({ userId }: { userId?: string }) {
     <div className="w-full flex flex-col gap-6 font-nunito max-w-[1100px] mx-auto">
       
       {/* Header Banner */}
-      <div className="w-full aspect-[16/7] sm:aspect-[4/1] md:aspect-[5/1] lg:aspect-[5.5/1] rounded-[36px] overflow-hidden relative shadow-md border-[3px] border-white bg-white">
+      <div className="w-full h-[200px] min-h-[200px] rounded-[36px] overflow-hidden relative shadow-md border-[3px] border-white bg-white flex-shrink-0">
          <Image src="/banner.png" alt="Co2IQ Banner" fill className="object-cover object-center" />
       </div>
 
