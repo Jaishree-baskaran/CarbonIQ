@@ -6,15 +6,17 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
   const { signOut, profile } = useAuth();
   const isAdmin = profile?.role === "org_admin";
 
+  const commonTabs = [
+    { id: "Individual Mode", label: "Individual", icon: Leaf },
+    { id: "Village Hub", label: "Village Hub", icon: MapPin },
+    { id: "India Methane Tracker", label: "Methane Tracker", icon: Wind },
+    { id: "City Air Quality", label: "Air Quality", icon: Wind },
+    { id: "State Policy Hub", label: "Policy Hub", icon: ShieldCheck }
+  ];
+
   const navItems = isAdmin 
-    ? [{ id: "Organization Dashboard", label: "Org Dashboard", icon: Building2 }]
-    : [
-        { id: "Individual Mode", label: "Individual", icon: Leaf },
-        { id: "Village Hub", label: "Village Hub", icon: MapPin },
-        { id: "India Methane Tracker", label: "Methane Tracker", icon: Wind },
-        { id: "City Air Quality", label: "Air Quality", icon: Wind },
-        { id: "State Policy Hub", label: "Policy Hub", icon: ShieldCheck }
-      ];
+    ? [{ id: "Organization Dashboard", label: "Org Dashboard", icon: Building2 }, ...commonTabs]
+    : commonTabs;
 
   return (
     <header className="w-full bg-[#ECF5E2] border-b border-[#D7E3A4] sticky top-0 z-50">
