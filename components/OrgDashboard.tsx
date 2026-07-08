@@ -354,7 +354,7 @@ export default function OrgDashboard() {
 
             <div className="bg-gray-50 rounded-2xl p-4 relative overflow-hidden border border-gray-100/50">
               <div className="text-[11px] font-bold text-gray-500 mb-1">EV Sales FY24</div>
-              <div className="font-fredoka text-[22px] text-[#4E8B2C]">{n.ev_sales_fy24_millions}M</div>
+              <div className="font-fredoka text-[22px] text-[#4E8B2C]">{n.ev_sales_2024}M</div>
               <div className="text-[10px] text-gray-400 font-medium">Total sales</div>
               <BatteryCharging size={32} strokeWidth={1} className="absolute -bottom-2 -right-2 text-[#4E8B2C]/10" />
             </div>
