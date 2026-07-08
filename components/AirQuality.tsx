@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { CITY_AQI, AQI_COLORS } from "@/utils/data";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
-import { CloudFog, Building2, Search, Palette } from "lucide-react";
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
+import { CloudFog, Search, Palette } from "lucide-react";
 import useSWR from 'swr';
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
@@ -17,9 +17,8 @@ export default function AirQuality() {
     
     async function fetchGlobal() {
       try {
-        // As requested: 5 key cities only for the top cards.
-        const topCities = ["Delhi", "Mumbai", "Chennai", "Kolkata", "Bangalore"];
-        const promises = topCities.map(city => fetch(`/api/aqi?city=${city}&t=${Date.now()}`).then(r => r.json()));
+        const topCities = ["Delhi", "Mumbai", "Chennai", "Kolkata", "Bengaluru"];
+        const promises = topCities.map(city => fetch(`/api/aqi?city=${city}`).then(r => r.json()));
         const results = await Promise.all(promises);
         
         const validData = results
@@ -34,14 +33,17 @@ export default function AirQuality() {
       }
     }
     
-    fetchGlobal(); // Initial fetch
-    // Connect to everyday live updates by polling every 60 seconds
+    fetchGlobal();
     intervalId = setInterval(fetchGlobal, 60000);
     
     return () => clearInterval(intervalId);
   }, []);
 
-  const { data: response, isValidating } = useSWR(`/api/aqi?city=${encodeURIComponent(selCity)}&t=${Date.now()}`, fetcher);
+  // Removed Date.now() to fix the infinite SWR re-fetch loop
+  const { data: response, isValidating } = useSWR(`/api/aqi?city=${encodeURIComponent(selCity)}`, fetcher, {
+    refreshInterval: 60000,
+    revalidateOnFocus: false
+  });
   const liveData = response?.data;
 
   const liveAqis = globalData.map((d: any) => d.aqi);
@@ -62,15 +64,10 @@ export default function AirQuality() {
   const cd = liveData || CITY_AQI[selCity];
   const col = AQI_COLORS[cd.category] || "#6b7c6d";
 
-  const chartData = Object.entries(CITY_AQI)
-    .map(([city, data]: [string, any]) => ({ city, aqi: data.aqi }))
-    .sort((a, b) => b.aqi - a.aqi);
-
   const formatVal = (val: any) => typeof val === 'number' ? `${val} µg/m³` : (val?.includes('µg') ? val : `${val} µg/m³`);
 
   return (
     <div className="w-full">
-
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
         <div className="metric-card after:bg-blue after:content-[''] after:absolute after:-top-2 after:-right-2 after:w-12 after:h-12 after:rounded-full after:opacity-15">
@@ -113,64 +110,118 @@ export default function AirQuality() {
         </div>
       </div>
 
-      <div className="neo-card mb-5 relative overflow-hidden">
-        <div className="font-fredoka text-[16px] tracking-[0.3px] mb-[14px] flex items-center gap-[8px]">
-          <Search size={20} strokeWidth={2.5} className="text-black" /> City AQI Explorer
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-5">
+        {/* Left side: Detailed Explorer */}
+        <div className="lg:col-span-2 neo-card mb-0 relative overflow-hidden flex flex-col justify-between">
+          <div>
+            <div className="font-fredoka text-[16px] tracking-[0.3px] mb-[14px] flex items-center gap-[8px]">
+              <Search size={20} strokeWidth={2.5} className="text-black" /> City AQI Explorer
+            </div>
+            
+            {/* Quick Metro buttons */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {["Delhi", "Mumbai", "Kolkata", "Chennai", "Bengaluru"].map((city) => (
+                <button
+                  key={city}
+                  onClick={() => setSelCity(city)}
+                  className={`px-3 py-1.5 rounded-lg text-[12px] font-bold border-2 transition-all ${
+                    selCity === city
+                      ? "bg-[#657733] text-white border-[#657733] shadow-sm"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+                  }`}
+                >
+                  {city}
+                </button>
+              ))}
+            </div>
+
+            <select 
+              className="neo-input mb-[16px] max-w-md relative z-10"
+              value={selCity} 
+              onChange={e => setSelCity(e.target.value)}
+            >
+              {Object.keys(CITY_AQI).map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+          
+          {isValidating ? (
+            <div className="animate-pulse">
+              <div className="flex items-center gap-[16px] mb-[16px]">
+                <div className="w-[80px] h-[56px] bg-black/10 rounded-[8px]"></div>
+                <div>
+                  <div className="w-[100px] h-[24px] bg-black/10 rounded-[20px] mb-1"></div>
+                  <div className="w-[80px] h-[12px] bg-black/5 rounded-[4px]"></div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="metric-card !p-3">
+                    <div className="w-[40px] h-[10px] bg-black/10 mb-2 rounded"></div>
+                    <div className="w-[60px] h-[20px] bg-black/10 mb-2 rounded"></div>
+                    <div className="w-[50px] h-[10px] bg-black/5 rounded"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="animate-[fadeIn_0.3s_ease]">
+              <div className="flex items-center gap-[16px] mb-[16px]">
+                <div className="font-fredoka text-[56px] leading-none" style={{ color: col }}>{cd.aqi}</div>
+                <div>
+                  <div className="inline-block p-[4px_12px] rounded-[20px] text-[11px] font-black border-[2.5px] border-black" style={{ backgroundColor: col, color: ['#fbbf24', '#86efac', '#4ade80'].includes(col) ? '#111' : '#fff' }}>
+                    {cd.category}
+                  </div>
+                  <div className="text-[11px] font-bold text-black/40 mt-[4px]">Air Quality Index</div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {[
+                  { label: "PM2.5", val: formatVal(cd.pm25), delta: "Safe: <25" },
+                  { label: "PM10", val: formatVal(cd.pm10), delta: "Safe: <50" },
+                  { label: "NO2", val: formatVal(cd.no2), delta: "Safe: <40" },
+                  { label: "SO2", val: formatVal(cd.so2), delta: "Safe: <20" }
+                ].map((m, i) => (
+                  <div key={i} className="metric-card !p-3">
+                    <div className="text-[9px] font-extrabold tracking-[0.1em] uppercase text-black/45 mb-1">{m.label}</div>
+                    <div className="font-fredoka text-[20px] text-black leading-none">{m.val}</div>
+                    <div className="text-[10px] font-bold text-black/40 mt-1">{m.delta}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-        <select 
-          className="neo-input mb-[16px] max-w-md relative z-10"
-          value={selCity} 
-          onChange={e => setSelCity(e.target.value)}
-        >
-          {Object.keys(CITY_AQI).map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-        
-        {isValidating ? (
-          <div className="animate-pulse">
-            <div className="flex items-center gap-[16px] mb-[16px]">
-              <div className="w-[80px] h-[56px] bg-black/10 rounded-[8px]"></div>
-              <div>
-                <div className="w-[100px] h-[24px] bg-black/10 rounded-[20px] mb-1"></div>
-                <div className="w-[80px] h-[12px] bg-black/5 rounded-[4px]"></div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="metric-card !p-3">
-                  <div className="w-[40px] h-[10px] bg-black/10 mb-2 rounded"></div>
-                  <div className="w-[60px] h-[20px] bg-black/10 mb-2 rounded"></div>
-                  <div className="w-[50px] h-[10px] bg-black/5 rounded"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="animate-[fadeIn_0.3s_ease]">
-            <div className="flex items-center gap-[16px] mb-[16px]">
-              <div className="font-fredoka text-[56px] leading-none" style={{ color: col }}>{cd.aqi}</div>
-              <div>
-                <div className="inline-block p-[4px_12px] rounded-[20px] text-[11px] font-black border-[2.5px] border-black" style={{ backgroundColor: col, color: ['#fbbf24', '#86efac', '#4ade80'].includes(col) ? '#111' : '#fff' }}>
-                  {cd.category}
-                </div>
-                <div className="text-[11px] font-bold text-black/40 mt-[4px]">Air Quality Index</div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[
-                { label: "PM2.5", val: formatVal(cd.pm25), delta: "Safe: <25" },
-                { label: "PM10", val: formatVal(cd.pm10), delta: "Safe: <50" },
-                { label: "NO2", val: formatVal(cd.no2), delta: "Safe: <40" },
-                { label: "SO2", val: formatVal(cd.so2), delta: "Safe: <20" }
-              ].map((m, i) => (
-                <div key={i} className="metric-card !p-3">
-                  <div className="text-[9px] font-extrabold tracking-[0.1em] uppercase text-black/45 mb-1">{m.label}</div>
-                  <div className="font-fredoka text-[20px] text-black leading-none">{m.val}</div>
-                  <div className="text-[10px] font-bold text-black/40 mt-1">{m.delta}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+
+        {/* Right side: Recharts Comparison Chart */}
+        <div className="neo-card mb-0 flex flex-col justify-between">
+           <div>
+             <div className="font-fredoka text-[16px] tracking-[0.3px] mb-[14px] flex items-center gap-[8px]">
+                <CloudFog size={20} strokeWidth={2.5} className="text-[#657733]" /> Live Metro Comparison
+             </div>
+             <p className="text-[12px] text-gray-500 mb-4">Real-time comparison of primary metropolitan cities</p>
+           </div>
+           
+           <div className="h-[220px] w-full">
+             {loadingGlobal ? (
+                <div className="h-full flex items-center justify-center font-bold text-black/40 text-[11px] animate-pulse">Fetching comparison data...</div>
+             ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={globalData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                    <XAxis dataKey="city" tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 600 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 600 }} axisLine={false} tickLine={false} />
+                    <RechartsTooltip contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                    <Bar dataKey="aqi" radius={[6, 6, 0, 0]}>
+                      {globalData.map((entry: any, index: number) => {
+                        const col = AQI_COLORS[entry.category] || "#657733";
+                        return <Cell key={`cell-${index}`} fill={col} />;
+                      })}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+             )}
+           </div>
+        </div>
       </div>
 
       <div className="neo-card">
