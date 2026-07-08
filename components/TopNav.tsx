@@ -1,89 +1,81 @@
-import { LogOut, ChevronDown } from "lucide-react";
+import { LogOut, LayoutGrid, ChevronDown, User } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: string) => void }) {
   const { signOut, profile } = useAuth();
   const isAdmin = profile?.role === "org_admin";
 
+  // Only keeping the real data tabs. The mock tabs are hidden as requested.
   const commonTabs = [
-    { id: "Individual Mode", label: "Individual" },
-    // Temporarily hiding mock data tabs as requested
-    // { id: "Village Hub", label: "Village Hub" },
-    // { id: "India Methane Tracker", label: "Methane Tracker" },
-    // { id: "City Air Quality", label: "Air Quality" },
-    // { id: "State Policy Hub", label: "Policy Hub" }
+    { id: "Individual Mode", label: "Individual", icon: User }
   ];
 
   const navItems = isAdmin 
-    ? [{ id: "Organization Dashboard", label: "Dashboard" }, ...commonTabs]
+    ? [{ id: "Organization Dashboard", label: "Dashboard", icon: LayoutGrid }, ...commonTabs]
     : commonTabs;
 
   return (
-    <div className="w-full relative z-50">
-      <header className="max-w-[1400px] mx-auto px-6 pt-4 pb-2 flex items-start justify-between relative">
+    <div className="w-full px-4 pt-6 pb-2 relative z-50">
+      <header className="max-w-[1200px] mx-auto bg-white/95 backdrop-blur-xl rounded-[40px] shadow-[0_8px_32px_rgba(0,0,0,0.06)] border border-white/80 p-2.5 flex items-center justify-between">
         
         {/* Left: Text Logo Only */}
-        <div className="flex items-center mt-2">
-          <div className="font-black text-[28px] tracking-tighter text-[#111] font-sans lowercase flex items-center gap-1">
-            carboniq<span className="text-[18px]">✦</span>
+        <div className="flex items-center pl-4 pr-6">
+          <div className="font-extrabold text-[24px] tracking-tight text-[#111] font-fredoka">
+            Carbon<span className="text-lime-600">IQ</span>
           </div>
         </div>
 
-        {/* Center: The Black Dropdown Bar (Crypko Style) */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2">
-          {/* Main black shape */}
-          <div className="bg-black text-white px-8 md:px-12 py-4 rounded-b-[32px] flex items-center gap-6 md:gap-8 shadow-2xl relative">
-            
-            {/* SVG curves to create the smooth inverted corners (optional, simplified with CSS) */}
-            <div className="absolute -left-[24px] top-0 w-[24px] h-[24px] bg-transparent">
-              <div className="w-full h-full bg-transparent rounded-tr-[24px] shadow-[12px_-12px_0_0_#000]"></div>
-            </div>
-            <div className="absolute -right-[24px] top-0 w-[24px] h-[24px] bg-transparent">
-              <div className="w-full h-full bg-transparent rounded-tl-[24px] shadow-[-12px_-12px_0_0_#000]"></div>
-            </div>
+        {/* Navigation Links */}
+        <nav className="hidden md:flex items-center gap-2">
+          {navItems.map(item => {
+            const isActive = mode === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setMode(item.id)}
+                className={`flex flex-col items-center justify-center w-[85px] h-[75px] rounded-[24px] transition-all duration-300 ${
+                  isActive 
+                    ? "bg-gradient-to-b from-[#f0f8ec] to-[#e4f1dc] shadow-[inset_0_0_20px_rgba(255,255,255,0.8)]" 
+                    : "hover:bg-gray-50/80"
+                }`}
+              >
+                <item.icon 
+                  size={24} 
+                  strokeWidth={isActive ? 2 : 1.5} 
+                  className={`mb-1.5 transition-colors duration-300 ${isActive ? "text-[#2e6f40]" : "text-gray-600"}`} 
+                />
+                <span className={`text-[10px] font-bold tracking-wide ${isActive ? "text-[#2e6f40]" : "text-gray-500"}`}>
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </nav>
 
-            {/* Nav Links */}
-            <nav className="hidden lg:flex items-center gap-6">
-              {navItems.map(item => {
-                const isActive = mode === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setMode(item.id)}
-                    className={`text-[13px] font-bold tracking-wide transition-all relative ${
-                      isActive ? "text-white" : "text-white/50 hover:text-white/80"
-                    }`}
-                  >
-                    {item.label}
-                    {isActive && (
-                      <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#D4C04D] rounded-full"></span>
-                    )}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-
-        {/* Right: User Profile & Logout (Pill Style) */}
-        <div className="flex items-center gap-3 mt-2 z-10 relative">
-          <div className="flex items-center gap-3 bg-white border-[1.5px] border-[#111] px-2 py-1.5 pr-4 rounded-full cursor-pointer hover:bg-gray-50 transition-colors shadow-[0_2px_10px_rgba(0,0,0,0.05)]">
-            <div className="w-7 h-7 rounded-full bg-[#111] flex items-center justify-center text-white font-black text-[10px]">
+        {/* User Profile & Logout */}
+        <div className="flex items-center gap-3 pr-1">
+          
+          {/* User Pill */}
+          <div className="hidden sm:flex items-center gap-3 bg-gray-50/80 border border-gray-100/80 p-1.5 pr-4 rounded-full cursor-pointer hover:bg-gray-100 transition-colors">
+            <div className="w-[42px] h-[42px] rounded-full bg-[#d0dfa9] flex items-center justify-center text-[#374f1c] font-black text-[13px] shadow-sm">
               {profile?.full_name?.substring(0, 2).toUpperCase() || "US"}
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[12px] font-bold text-[#111] leading-none">{profile?.full_name || "User"}</span>
-              <ChevronDown size={14} strokeWidth={2.5} className="text-[#111]" />
+            <div className="flex flex-col text-left mr-2">
+              <span className="text-[13px] font-bold text-gray-800 leading-tight mb-0.5">{profile?.full_name || "User"}</span>
+              <span className="text-[9px] font-extrabold tracking-wider text-[#5b872b] uppercase">{profile?.role?.replace('_', ' ')}</span>
             </div>
+            <ChevronDown size={14} className="text-gray-400" />
           </div>
 
+          {/* Logout Button */}
           <button 
             onClick={signOut} 
-            className="w-10 h-10 flex items-center justify-center text-[#111] border-[1.5px] border-[#111] rounded-full hover:bg-red-50 hover:text-red-500 hover:border-red-500 transition-all bg-white"
+            className="w-[50px] h-[50px] flex items-center justify-center text-gray-500 border border-gray-100 rounded-full hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition-all shadow-sm bg-white"
             title="Sign Out"
           >
-            <LogOut size={16} strokeWidth={2.5} />
+            <LogOut size={20} strokeWidth={2} />
           </button>
+          
         </div>
 
       </header>
