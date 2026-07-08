@@ -440,7 +440,7 @@ export default function IndividualMode({ userId }: { userId?: string }) {
               </button>
             </div>
             {chatResponse && (
-              <div className="mt-4 p-4 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl text-[14px] text-[#1E3A8A] leading-relaxed">
+              <div className="mt-4 p-4 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl text-[14px] text-[#1E3A8A] leading-relaxed whitespace-pre-wrap">
                 {chatResponse}
               </div>
             )}
@@ -540,7 +540,7 @@ export default function IndividualMode({ userId }: { userId?: string }) {
                   </button>
                 </div>
                 {chatResponse && (
-                  <div className="mt-4 p-4 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl text-[14px] text-[#1E3A8A] leading-relaxed">
+                  <div className="mt-4 p-4 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl text-[14px] text-[#1E3A8A] leading-relaxed whitespace-pre-wrap">
                     {chatResponse}
                   </div>
                 )}
