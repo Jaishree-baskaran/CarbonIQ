@@ -25,26 +25,15 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     console.log("AuthContext: useEffect mounted");
-    // Check active session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("AuthContext: getSession resolved, session:", session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id, session.user.email);
-      } else {
-        console.log("AuthContext: no session, setting loading to false");
-        setLoading(false);
-      }
-    }).catch(err => {
-      console.error("AuthContext: getSession rejected:", err);
-      setLoading(false);
-    });
+    let active = true;
 
-    // Listen for auth changes
+    // Listen for auth changes (this handles initial session load too)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log("AuthContext: onAuthStateChange event:", _event, "session:", session);
+      if (!active) return;
+      
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id, session.user.email);
@@ -55,7 +44,18 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
       }
     });
 
+    // Safety timeout: If Supabase auth hangs for more than 4 seconds, force loading to false
+    // so the user is never stuck on a blank green screen.
+    const timer = setTimeout(() => {
+      if (active) {
+        console.warn("AuthContext: Loading safety timeout triggered. Forcing loading to false.");
+        setLoading(false);
+      }
+    }, 4000);
+
     return () => {
+      active = false;
+      clearTimeout(timer);
       subscription.unsubscribe();
     };
   }, []);
