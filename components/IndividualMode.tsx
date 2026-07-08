@@ -507,7 +507,7 @@ export default function IndividualMode({ userId }: { userId?: string }) {
           <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#E5E7EB]">
              <div className="flex justify-between items-center mb-6">
                <h2 className="text-[18px] font-bold text-[#291100] flex items-center gap-2"><Target size={20} className="text-[#657733]" /> Monthly Goal Progress</h2>
-               <div className="text-[12px] font-black text-[#D4C04D] bg-[#D4C04D] px-3 py-1 rounded-lg border border-[#FDE047]">
+               <div className="text-[12px] font-black text-black bg-[#FDE047] px-3 py-1 rounded-lg border-[2px] border-black shadow-[2px_2px_0_#111]">
                  TOTAL XP: {totalXP}
                </div>
              </div>
