@@ -9,6 +9,7 @@ interface AuthContextType {
   profile: any | null;
   loading: boolean;
   signOut: () => Promise<void>;
+  updateProfileName: (name: string) => Promise<{ success: boolean; error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType>({
   profile: null,
   loading: true,
   signOut: async () => {},
+  updateProfileName: async () => ({ success: false }),
 });
 
 export function AuthContextProvider({ children }: { children: ReactNode }) {
@@ -87,13 +89,33 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateProfileName = async (name: string) => {
+    if (!user) return { success: false, error: "Not logged in" };
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .upsert({ 
+          id: user.id, 
+          full_name: name, 
+          role: profile?.role || "user" 
+        });
+      
+      if (error) throw error;
+      setProfile((prev: any) => ({ ...prev, full_name: name }));
+      return { success: true };
+    } catch (e: any) {
+      console.error("Failed to update profile name:", e);
+      return { success: false, error: e.message };
+    }
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     // Setting state to null is handled by the onAuthStateChange listener
   };
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signOut }}>
+    <AuthContext.Provider value={{ user, profile, loading, signOut, updateProfileName }}>
       {children}
     </AuthContext.Provider>
   );
