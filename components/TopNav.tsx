@@ -177,6 +177,7 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
             </div>
           </div>
         </div>
+      )}
     </>
   );
 }
