@@ -4,7 +4,6 @@ import { supabase } from "@/utils/supabase/client";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
 import { BarChart3, Search, TrendingUp, MapPin, Zap, Car, Flame, Route, Leaf, Trophy, Target, Award, BrainCircuit, Activity, TreePine, Download, CheckCircle2, Circle } from "lucide-react";
 import Image from "next/image";
-import ReactMarkdown from "react-markdown";
 
 const TF: any = {
   "Car": { "Petrol": 0.21, "Diesel": 0.27, "CNG": 0.16, "Electric": 0.06, "N/A": 0.21 },
@@ -441,18 +440,8 @@ export default function IndividualMode({ userId }: { userId?: string }) {
               </button>
             </div>
             {chatResponse && (
-              <div className="mt-4 p-4 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl text-[14px] text-[#1E3A8A] leading-relaxed">
-                <ReactMarkdown
-                  components={{
-                    p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
-                    ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-2 flex flex-col gap-1" {...props} />,
-                    ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-2 flex flex-col gap-1" {...props} />,
-                    li: ({node, ...props}) => <li className="text-[14px]" {...props} />,
-                    strong: ({node, ...props}) => <strong className="font-bold text-[#1E40AF]" {...props} />,
-                  }}
-                >
-                  {chatResponse}
-                </ReactMarkdown>
+              <div className="mt-4 p-4 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl text-[14px] text-[#1E3A8A] leading-relaxed whitespace-pre-wrap">
+                {chatResponse}
               </div>
             )}
           </div>
@@ -551,18 +540,8 @@ export default function IndividualMode({ userId }: { userId?: string }) {
                   </button>
                 </div>
                 {chatResponse && (
-                  <div className="mt-4 p-4 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl text-[14px] text-[#1E3A8A] leading-relaxed">
-                    <ReactMarkdown
-                      components={{
-                        p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
-                        ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-2 flex flex-col gap-1" {...props} />,
-                        ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-2 flex flex-col gap-1" {...props} />,
-                        li: ({node, ...props}) => <li className="text-[14px]" {...props} />,
-                        strong: ({node, ...props}) => <strong className="font-bold text-[#1E40AF]" {...props} />,
-                      }}
-                    >
-                      {chatResponse}
-                    </ReactMarkdown>
+                  <div className="mt-4 p-4 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl text-[14px] text-[#1E3A8A] leading-relaxed whitespace-pre-wrap">
+                    {chatResponse}
                   </div>
                 )}
              </div>
