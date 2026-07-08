@@ -6,8 +6,10 @@ import {
   Bell, Calendar, ShieldCheck, TrendingUp, Leaf, CloudLightning,
   Activity, Wind, Sun, BatteryCharging, Zap
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function OrgDashboard() {
+  const { profile } = useAuth();
   const [emissions, setEmissions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [aiResponse, setAiResponse] = useState<string | null>(null);
@@ -92,7 +94,7 @@ export default function OrgDashboard() {
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 px-2">
         <div>
           <h1 className="text-[32px] font-bold text-[#111] flex items-center gap-2 font-fredoka tracking-wide">
-            Good morning, Admin! <span className="text-[#5b872b]"><Leaf size={26} strokeWidth={2.5} /></span>
+            Good morning, {profile?.full_name ? profile.full_name.split(' ')[0] : 'Admin'}! <span className="text-[#5b872b]"><Leaf size={26} strokeWidth={2.5} /></span>
           </h1>
           <p className="text-[14px] text-gray-500 font-medium mt-1">
             Here's what's happening with your organization today.
@@ -183,10 +185,10 @@ export default function OrgDashboard() {
       <div className="relative w-full rounded-[32px] bg-white/40 backdrop-blur-[16px] p-8 md:p-12 mb-8 overflow-hidden flex flex-col md:flex-row items-center justify-between border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <div className="relative z-10 max-w-[600px]">
           <div className="flex items-center gap-2 text-[#1B4332] font-bold text-[20px] font-fredoka mb-4">
-            <span className="text-[24px]">✨</span> Vayundhra AI Strategy
+            Vayundhra AI Strategy
           </div>
           <p className="text-[13px] font-medium text-gray-700 leading-[1.7] mb-6 max-w-[450px]">
-            Hello Admin, I am Vayundhra. I have analyzed the aggregate data for your {totalUsers} members. The current organizational risk is {Math.round(avgRisk)}%. 
+            Hello {profile?.full_name ? profile.full_name.split(' ')[0] : 'Admin'}, I am Vayundhra. I have analyzed the aggregate data for your {totalUsers} members. The current organizational risk is {Math.round(avgRisk)}%. 
             <br/><br/>
             Here is your strategy for reduction...
           </p>

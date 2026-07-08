@@ -1,8 +1,8 @@
-import { LogOut, ChevronDown, User, MapPin, CloudRain, Wind, ShieldCheck, Home, Leaf } from "lucide-react";
+import { LogOut, User, MapPin, CloudRain, Wind, ShieldCheck, Home, Leaf } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: string) => void }) {
-  const { signOut, profile } = useAuth();
+  const { signOut, profile, user } = useAuth();
   const isAdmin = profile?.role === "org_admin";
 
   const commonTabs = [
@@ -61,15 +61,14 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
         {/* User Profile & Logout */}
         <div className="flex items-center gap-4 pl-8">
           
-          <div className="hidden sm:flex items-center gap-3 bg-white border border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-1.5 pr-4 rounded-full cursor-pointer hover:border-gray-200 transition-colors">
+          <div className="hidden sm:flex items-center gap-3 bg-white border border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-1.5 pr-5 rounded-full cursor-pointer hover:border-gray-200 transition-colors">
             <div className="w-[36px] h-[36px] rounded-full bg-[#EAF2D5] flex items-center justify-center text-[#4A7016] font-bold text-[13px]">
-              {profile?.full_name?.substring(0, 2).toUpperCase() || "US"}
+              {(profile?.full_name || user?.email || "US").substring(0, 2).toUpperCase()}
             </div>
-            <div className="flex flex-col text-left mr-2">
-              <span className="text-[12px] font-bold text-gray-800 leading-tight mb-0.5">{profile?.full_name || "User"}</span>
+            <div className="flex flex-col text-left">
+              <span className="text-[12px] font-bold text-gray-800 leading-tight mb-0.5">{profile?.full_name || user?.email?.split('@')[0] || "User"}</span>
               <span className="text-[9px] font-extrabold tracking-wider text-[#6DA02E] uppercase">{profile?.role?.replace('_', ' ')}</span>
             </div>
-            <ChevronDown size={14} className="text-gray-400" />
           </div>
 
           <button 
