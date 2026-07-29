@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, Building, Rocket, Mail } from "lucide-react";
+import { User, Building, Rocket, Mail, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/utils/supabase/client";
 
 export default function Login() {
@@ -7,6 +7,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const isAdmin = (email: string) => email.toLowerCase() === 'jaishreeb21@gmail.com';
 
@@ -122,7 +123,22 @@ export default function Login() {
           {mode !== 'forgot' && (
             <div>
               <label className="block text-[12px] font-extrabold tracking-[0.05em] uppercase mb-[6px] text-black">Password</label>
-              <input name="password" type="password" placeholder="••••••••" className="w-full bg-white border-[3px] border-black rounded-2xl px-4 py-3 font-medium outline-none focus:ring-4 focus:ring-lime-300/50 transition-all shadow-[2px_2px_0_#111]" required />
+              <div className="relative">
+                <input 
+                  name="password" 
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="••••••••" 
+                  className="w-full bg-white border-[3px] border-black rounded-2xl pl-4 pr-12 py-3 font-medium outline-none focus:ring-4 focus:ring-lime-300/50 transition-all shadow-[2px_2px_0_#111]" 
+                  required 
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} strokeWidth={2.5} /> : <Eye size={20} strokeWidth={2.5} />}
+                </button>
+              </div>
             </div>
           )}
 
