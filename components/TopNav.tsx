@@ -1,4 +1,4 @@
-import { LogOut, User, MapPin, CloudRain, Wind, ShieldCheck, Home, Leaf, X } from "lucide-react";
+import { LogOut, User, MapPin, CloudRain, Wind, ShieldCheck, Home, Leaf, X, Store } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import { useState } from "react";
@@ -25,7 +25,8 @@ export default function TopNav({ mode, setMode }: { mode: string; setMode: (m: s
     { id: "Village Hub", label: "Village Hub", icon: MapPin },
     { id: "India Methane Tracker", label: "Methane Tracker", icon: CloudRain },
     { id: "City Air Quality", label: "Air Quality", icon: Wind },
-    { id: "State Policy Hub", label: "Policy Hub", icon: ShieldCheck }
+    { id: "State Policy Hub", label: "Policy Hub", icon: ShieldCheck },
+    { id: "Carbon Marketplace", label: "Future Scope", icon: Store }
   ];
 
   const navItems = isAdmin 

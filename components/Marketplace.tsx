@@ -195,7 +195,7 @@ export default function Marketplace() {
                 <div className="w-[42px] h-[42px] rounded-xl bg-[#1B4332] flex items-center justify-center shadow-[3px_3px_0_#111]">
                   <DollarSign size={22} className="text-[#C8E63C]" />
                 </div>
-                Carbon Credit Marketplace
+                Carbon Credit Marketplace — Future Scope
               </h1>
               <p className="text-[14px] text-gray-500 font-medium mt-1.5 ml-[54px]">
                 India's Carbon Credit Trading Scheme (CCTS) • Bureau of Energy Efficiency
